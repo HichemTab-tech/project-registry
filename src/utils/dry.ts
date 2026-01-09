@@ -24,3 +24,8 @@ export function buildChoices (this: Command) {
         templates
     };
 }
+
+export const truncate = (s: string | undefined, n = 100) => {
+    if (!s) return ''
+    return s.length > n ? s.slice(0, n) + '...' : s
+}

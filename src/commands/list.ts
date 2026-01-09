@@ -1,6 +1,10 @@
 import {Command, Flags} from '@oclif/core'
+import chalk from 'chalk'
+import Table from 'cli-table3'
+import stripAnsi from 'strip-ansi'
 
 import {getAllTemplates} from '../utils/config.js'
+import {truncate} from "../utils/dry.js";
 
 class List extends Command {
     static description = 'List all registered templates'
@@ -11,10 +15,12 @@ class List extends Command {
     ]
 
     static flags = {
-        "with-content": Flags.string({char: 'c', description: 'With template content'}),
+        table: Flags.boolean({allowNo: true, char: 't', default: true, description: 'Show output in table format'}),
+        "with-content": Flags.boolean({char: 'c', description: 'With template content'})
     }
 
     async run(): Promise<void> {
+        const {flags} = await this.parse(List)
         const templates = getAllTemplates()
         const names = Object.keys(templates)
 
@@ -23,21 +29,47 @@ class List extends Command {
             return
         }
 
-        for (const name of names) {
-            const template = templates[name]
-            let result = name;
-            if (template.description) {
-                if (template.description.length > 100) template.description = template.description.slice(0, 100) + '...'
-                result += ` - ${template.description}`
-            }
-            else{
-                result += ` - No description`
+        if (flags.table) {
+            const headers = ['Name', 'Description']
+            if (flags['with-content']) headers.push('Commands')
+            const table = new Table({head: headers})
+
+            for (const name of names) {
+                const template = templates[name]
+                const desc = template.description ? truncate(template.description) : 'No description'
+                let row;
+                if (flags['with-content']) {
+                    const rawCommands = template.commands ? template.commands.join(' && ') : ''
+                    const truncated = truncate(stripAnsi(rawCommands))
+                    const coloredCommands = truncated.split(' && ').join(chalk.cyan(' && '))
+                    row = [chalk.green(name), desc, coloredCommands]
+                }
+                else{
+                    row = [chalk.green(name), desc]
+                }
+
+                table.push(row)
             }
 
-            if (template.commands) {
-                let commands = template.commands.join(' && ')
-                if (commands.length > 100) commands = commands.slice(0, 100) + '...'
-                result += ` - ${commands}`
+            this.log(table.toString())
+            return
+        }
+
+        for (const name of names) {
+            const template = templates[name]
+            let result = chalk.green(name)
+            if (template.description) {
+                const desc = truncate(template.description)
+                result += ` ${chalk.yellow('-')} ${desc}`
+            } else {
+                result += ` ${chalk.yellow('-')} ${chalk.grey('No description')}`
+            }
+
+            if (template.commands && flags['with-content']) {
+                const rawCommands = template.commands ? template.commands.join(' && ') : ''
+                const truncated = truncate(stripAnsi(rawCommands))
+                const coloredCommands = truncated.split(' && ').join(chalk.cyan(' && '))
+                result += ` ${chalk.yellow('-')} ${coloredCommands}`
             }
 
             this.log(result)

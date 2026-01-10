@@ -4,18 +4,23 @@ import * as fs from 'node:fs'
 import * as os from 'node:os'
 import * as path from 'node:path'
 
-import {setConfigDir} from '../../src/utils/config.js'
+import {getCustomConfig, setConfigDir, setIncludePresets} from '../../src/utils/config.js'
 
 describe('list', () => {
     let testDir: string
+    const originalIncludePresent = getCustomConfig().includePresets
+    const originalDir = getCustomConfig().customDir
 
     beforeEach(() => {
         testDir = fs.mkdtempSync(path.join(os.tmpdir(), 'prj-reg-test-'))
         setConfigDir(testDir)
+        setIncludePresets(false);
     })
 
     afterEach(() => {
         fs.rmSync(testDir, {force: true, recursive: true})
+        setIncludePresets(originalIncludePresent)
+        setConfigDir(originalDir)
     })
 
     it('runs list with empty config', async () => {

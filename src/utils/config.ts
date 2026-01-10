@@ -12,13 +12,27 @@ export interface ConfigData {
     [key: string]: Template
 }
 
-let customConfigDir: string | undefined
+const customConfig: {
+    customDir: string | undefined,
+    includePresets: boolean
+} = {
+    customDir: undefined,
+    includePresets: true
+};
 
-export function setConfigDir(dir: string): void {
-  customConfigDir = dir
+export function getCustomConfig() {
+    return customConfig
 }
 
-const getConfigDir = () => customConfigDir || path.join(os.homedir(), '.project-registry')
+export function setConfigDir(dir: string|undefined): void {
+    customConfig.customDir = dir
+}
+
+export function setIncludePresets(include: boolean): void {
+    customConfig.includePresets = include
+}
+
+const getConfigDir = () => customConfig.customDir || path.join(os.homedir(), '.project-registry')
 const getConfigFile = () => path.join(getConfigDir(), 'config.json')
 
 const presetsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'presets', 'default.json')
@@ -36,7 +50,7 @@ function ensureConfigFile(): void {
     const file = getConfigFile()
     if (!fs.existsSync(file)) {
         fs.writeFileSync(file, JSON.stringify({}, null, 2), 'utf8')
-        writePresetConfig()
+        if (customConfig.includePresets) writePresetConfig()
     }
 }
 

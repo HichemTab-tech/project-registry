@@ -1,7 +1,8 @@
 import * as fs from 'node:fs'
 import * as os from 'node:os'
 import * as path from 'node:path'
-import { fileURLToPath } from 'node:url'
+
+import {presets} from "../presets/default.js";
 
 export interface Template {
     commands: string[]
@@ -35,8 +36,6 @@ export function setIncludePresets(include: boolean): void {
 const getConfigDir = () => customConfig.customDir || path.join(os.homedir(), '.project-registry')
 const getConfigFile = () => path.join(getConfigDir(), 'config.json')
 
-const presetsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'presets', 'default.json')
-
 
 function ensureConfigDir(): void {
     const dir = getConfigDir()
@@ -54,17 +53,8 @@ function ensureConfigFile(): void {
     }
 }
 
-function loadPreset(): ConfigData {
-    try {
-        const content = fs.readFileSync(presetsPath, 'utf8')
-        return JSON.parse(content) as ConfigData
-    } catch {
-        return {}
-    }
-}
-
 export function writePresetConfig(): void {
-    saveConfig(loadPreset());
+    saveConfig(presets);
 }
 
 export function loadConfig(): ConfigData {

@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(CI=true pnpm remove:*)",
-      "Bash(pnpm run build)",
-      "Bash(node bin/run.js:*)"
-    ]
-  }
-}

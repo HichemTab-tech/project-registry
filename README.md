@@ -1,397 +1,160 @@
-project-registry
-=================
+# projx
 
-A developer CLI that starts projects from named templates backed by shell commands.
+A CLI tool to save and run command templates with variables.
 
-
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/project-registry.svg)](https://npmjs.org/package/project-registry)
 [![Downloads/week](https://img.shields.io/npm/dw/project-registry.svg)](https://npmjs.org/package/project-registry)
+[![License](https://img.shields.io/npm/l/project-registry.svg)](https://github.com/HichemTab-tech/project-registry/blob/master/LICENSE)
 
+## Installation
 
-<!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
-# Usage
-<!-- usage -->
-```sh-session
-$ npm install -g project-registry
-$ projx COMMAND
-running command...
-$ projx (--version)
-project-registry/0.0.0 win32-x64 node-v24.8.0
-$ projx --help [COMMAND]
-USAGE
-  $ projx COMMAND
-...
-```
-<!-- usagestop -->
-# Commands
-<!-- commands -->
-* [`projx hello PERSON`](#projx-hello-person)
-* [`projx hello world`](#projx-hello-world)
-* [`projx help [COMMAND]`](#projx-help-command)
-* [`projx plugins`](#projx-plugins)
-* [`projx plugins add PLUGIN`](#projx-plugins-add-plugin)
-* [`projx plugins:inspect PLUGIN...`](#projx-pluginsinspect-plugin)
-* [`projx plugins install PLUGIN`](#projx-plugins-install-plugin)
-* [`projx plugins link PATH`](#projx-plugins-link-path)
-* [`projx plugins remove [PLUGIN]`](#projx-plugins-remove-plugin)
-* [`projx plugins reset`](#projx-plugins-reset)
-* [`projx plugins uninstall [PLUGIN]`](#projx-plugins-uninstall-plugin)
-* [`projx plugins unlink [PLUGIN]`](#projx-plugins-unlink-plugin)
-* [`projx plugins update`](#projx-plugins-update)
-
-## `projx hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ projx hello PERSON -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Who is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ projx hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
+```bash
+npm install -g project-registry
 ```
 
-_See code: [src/commands/hello/index.ts](https://github.com/HichemTab-tech/project-registry/blob/v0.0.0/src/commands/hello/index.ts)_
+## Quick Start
 
-## `projx hello world`
+```bash
+# Add a template
+projx add react "pnpm create vite {{name}} --template react" "cd {{name}}" "pnpm install"
 
-Say hello world
+# Run it
+projx react my-app
 
-```
-USAGE
-  $ projx hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ projx hello world
-  hello world! (./src/commands/hello/world.ts)
+# Or use the run command
+projx run react my-app
 ```
 
-_See code: [src/commands/hello/world.ts](https://github.com/HichemTab-tech/project-registry/blob/v0.0.0/src/commands/hello/world.ts)_
+## Commands
 
-## `projx help [COMMAND]`
+### `projx add <name> <commands...>`
 
-Display help for projx.
+Register a new template with one or more commands.
 
-```
-USAGE
-  $ projx help [COMMAND...] [-n]
+```bash
+# Basic usage
+projx add <name> "command1" "command2" "command3"
 
-ARGUMENTS
-  [COMMAND...]  Command to show help for.
+# With description
+projx add <name> -d "My template description" "command1" "command2"
 
-FLAGS
-  -n, --nested-commands  Include all nested commands in the output.
-
-DESCRIPTION
-  Display help for projx.
+# Interactive mode
+projx add -i
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.36/src/commands/help.ts)_
+**Variables:** Use `{{variable}}` syntax in your commands. Variables are prompted or passed as arguments when running.
 
-## `projx plugins`
+### `projx run <name> [values...]`
 
-List installed plugins.
+Run a registered template.
 
-```
-USAGE
-  $ projx plugins [--json] [--core]
+```bash
+# Pass variable values as arguments
+projx run react my-app
 
-FLAGS
-  --core  Show core plugins.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  List installed plugins.
-
-EXAMPLES
-  $ projx plugins
+# Interactive mode - prompts for all variables
+projx run react -i
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/index.ts)_
+### `projx <name> [values...]`
 
-## `projx plugins add PLUGIN`
+Shortcut - run any template directly without the `run` command.
 
-Installs a plugin into projx.
-
-```
-USAGE
-  $ projx plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
-
-FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Installs a plugin into projx.
-
-  Uses npm to install plugins.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  Use the PROJX_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the PROJX_NPM_REGISTRY environment variable to set the npm registry.
-
-ALIASES
-  $ projx plugins add
-
-EXAMPLES
-  Install a plugin from npm registry.
-
-    $ projx plugins add myplugin
-
-  Install a plugin from a github url.
-
-    $ projx plugins add https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ projx plugins add someuser/someplugin
+```bash
+projx react my-app
 ```
 
-## `projx plugins:inspect PLUGIN...`
+### `projx list`
 
-Displays installation properties of a plugin.
+List all registered templates.
 
-```
-USAGE
-  $ projx plugins inspect PLUGIN...
+```bash
+# Table format (default)
+projx list
 
-ARGUMENTS
-  PLUGIN...  [default: .] Plugin to inspect.
+# With commands shown
+projx list -c
 
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ projx plugins inspect myplugin
+# Plain format
+projx list --no-table
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/inspect.ts)_
+### `projx select`
 
-## `projx plugins install PLUGIN`
+Interactively select and run a template.
 
-Installs a plugin into projx.
-
-```
-USAGE
-  $ projx plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
-
-FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Installs a plugin into projx.
-
-  Uses npm to install plugins.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  Use the PROJX_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the PROJX_NPM_REGISTRY environment variable to set the npm registry.
-
-ALIASES
-  $ projx plugins add
-
-EXAMPLES
-  Install a plugin from npm registry.
-
-    $ projx plugins install myplugin
-
-  Install a plugin from a github url.
-
-    $ projx plugins install https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ projx plugins install someuser/someplugin
+```bash
+projx select
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/install.ts)_
+### `projx remove <name>`
 
-## `projx plugins link PATH`
+Remove a registered template.
 
-Links a plugin into the CLI for development.
+```bash
+# By name
+projx remove react
 
-```
-USAGE
-  $ projx plugins link PATH [-h] [--install] [-v]
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help          Show CLI help.
-  -v, --verbose
-      --[no-]install  Install dependencies after linking the plugin.
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-
-EXAMPLES
-  $ projx plugins link myplugin
+# Interactive selection
+projx remove -s
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/link.ts)_
+## Examples
 
-## `projx plugins remove [PLUGIN]`
+### Project Templates
 
-Removes a plugin from the CLI.
+```bash
+# React + Vite
+projx add react "pnpm create vite {{name}} --template react-ts" "cd {{name}}" "pnpm install" "code ."
 
-```
-USAGE
-  $ projx plugins remove [PLUGIN...] [-h] [-v]
+# Next.js
+projx add next "pnpm create next-app {{name}}" "cd {{name}}" "code ."
 
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ projx plugins unlink
-  $ projx plugins remove
-
-EXAMPLES
-  $ projx plugins remove myplugin
+# Express API
+projx add express "mkdir {{name}}" "cd {{name}}" "pnpm init -y" "pnpm add express" "code ."
 ```
 
-## `projx plugins reset`
+### Dev Shortcuts
 
-Remove all user-installed and linked plugins.
+```bash
+# Git quick commit
+projx add gc "git add ." "git commit -m '{{message}}'" "git push"
 
-```
-USAGE
-  $ projx plugins reset [--hard] [--reinstall]
+# Docker compose
+projx add dcu "docker compose up -d"
+projx add dcd "docker compose down"
 
-FLAGS
-  --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
-  --reinstall  Reinstall all plugins after uninstalling.
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/reset.ts)_
-
-## `projx plugins uninstall [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ projx plugins uninstall [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ projx plugins unlink
-  $ projx plugins remove
-
-EXAMPLES
-  $ projx plugins uninstall myplugin
+# SSH to server
+projx add ssh-prod "ssh {{user}}@production-server.com"
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/uninstall.ts)_
+### Build & Deploy
 
-## `projx plugins unlink [PLUGIN]`
+```bash
+# Build and deploy
+projx add deploy "pnpm build" "pnpm deploy"
 
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ projx plugins unlink [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ projx plugins unlink
-  $ projx plugins remove
-
-EXAMPLES
-  $ projx plugins unlink myplugin
+# Run tests
+projx add t "pnpm test"
+projx add tw "pnpm test --watch"
 ```
 
-## `projx plugins update`
+## Not Just for Projects
 
-Update installed plugins.
+While `projx` is great for project scaffolding, it works for **any repeatable command sequence**:
 
-```
-USAGE
-  $ projx plugins update [-h] [-v]
+- **Git workflows** - commit, push, branch creation
+- **Docker operations** - build, run, compose commands
+- **SSH connections** - quick access to servers
+- **Build scripts** - compile, test, deploy pipelines
+- **System shortcuts** - any command you run often
 
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
+Think of it as a **command template manager** - save any sequence of commands once, run them anytime with dynamic variables.
 
-DESCRIPTION
-  Update installed plugins.
-```
+## Config Location
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/update.ts)_
-<!-- commandsstop -->
+Templates are stored in `~/.project-registry/config.json`
+
+## License
+
+MIT

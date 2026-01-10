@@ -11,25 +11,33 @@ export interface ConfigData {
     [key: string]: Template
 }
 
-const CONFIG_DIR = path.join(os.homedir(), '.project-registry')
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json')
+let customConfigDir: string | undefined
+
+export function setConfigDir(dir: string): void {
+  customConfigDir = dir
+}
+
+const getConfigDir = () => customConfigDir || path.join(os.homedir(), '.project-registry')
+const getConfigFile = () => path.join(getConfigDir(), 'config.json')
 
 function ensureConfigDir(): void {
-    if (!fs.existsSync(CONFIG_DIR)) {
-        fs.mkdirSync(CONFIG_DIR, {recursive: true})
+    const dir = getConfigDir()
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, {recursive: true})
     }
 }
 
 function ensureConfigFile(): void {
     ensureConfigDir()
-    if (!fs.existsSync(CONFIG_FILE)) {
-        fs.writeFileSync(CONFIG_FILE, JSON.stringify({}, null, 2), 'utf8')
+    const file = getConfigFile()
+    if (!fs.existsSync(file)) {
+        fs.writeFileSync(file, JSON.stringify({}, null, 2), 'utf8')
     }
 }
 
 export function loadConfig(): ConfigData {
     ensureConfigFile()
-    const content = fs.readFileSync(CONFIG_FILE, 'utf8')
+    const content = fs.readFileSync(getConfigFile(), 'utf8')
     try {
         return JSON.parse(content) as ConfigData
     } catch {
@@ -39,7 +47,7 @@ export function loadConfig(): ConfigData {
 
 export function saveConfig(config: ConfigData): void {
     ensureConfigFile()
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), 'utf8')
+    fs.writeFileSync(getConfigFile(), JSON.stringify(config, null, 2), 'utf8')
 }
 
 export function getTemplate(name: string): Template | undefined {

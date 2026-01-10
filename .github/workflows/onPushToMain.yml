@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+      - name: Install pnpm
+        run: npm install -g pnpm
       - name: Check if version already exists
         id: version-check
         run: |

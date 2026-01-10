@@ -6,6 +6,9 @@ A CLI tool to save and run command templates with variables.
 [![Downloads/week](https://img.shields.io/npm/dw/project-registry.svg)](https://npmjs.org/package/project-registry)
 [![License](https://img.shields.io/npm/l/project-registry.svg)](https://github.com/HichemTab-tech/project-registry/blob/master/LICENSE)
 
+
+![project-registry banner](assets/banner.png)
+
 ## Installation
 
 ```bash

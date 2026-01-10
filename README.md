@@ -1,4 +1,4 @@
-# project registry - projx
+# project-registry – `projx`
 
 A CLI tool to save and run command templates with variables.
 
@@ -12,18 +12,90 @@ A CLI tool to save and run command templates with variables.
 npm install -g project-registry
 ```
 
-## Quick Start
+or
 
 ```bash
-# Add a template
-projx add react "pnpm create vite {{name}} --template react" "cd {{name}}" "pnpm install"
-
-# Run it
-projx react my-app
-
-# Or use the run command
-projx run react my-app
+pnpm add -g project-registry
 ```
+
+
+## Quick Start
+
+### 1. Add a simple template
+
+A template is just **a name mapped to one or more commands**.
+
+```bash
+projx add react "pnpm create vite . --template react"
+```
+
+### 2. Run it
+
+```bash
+projx react
+```
+
+That’s it ^.^
+
+
+## Using variables
+
+Templates can contain variables using the `{{variable}}` syntax.
+
+Example:
+
+```bash
+projx add react \
+  "pnpm create vite {{name}} --template react" \
+  "cd {{name}}" \
+  "pnpm install"
+```
+
+Run it by passing values:
+
+```bash
+projx react my-app
+```
+
+If a value is missing, `projx` will **ask for it automatically**.
+
+Variables are optional — if you don’t need them, don’t use them.
+
+## Running templates (name or select)
+
+### Run directly by name
+
+```bash
+projx react my-app
+```
+
+This is the fastest way if you remember the name.
+
+### Use interactive selection (recommended)
+
+If you don’t remember the exact name:
+
+```bash
+projx select
+```
+
+You’ll get a numbered list and can pick one.
+
+#### Filtering templates
+
+You can filter the list when you have many templates:
+
+```bash
+projx select -f rea
+```
+
+Example:
+
+* `react`
+* `react-ts`
+* `react-shadcn`
+
+This makes `select` the **default workflow** for many users.
 
 ## Commands
 
@@ -42,7 +114,7 @@ projx add <name> -d "My template description" "command1" "command2"
 projx add -i
 ```
 
-**Variables:** Use `{{variable}}` syntax in your commands. Variables are prompted or passed as arguments when running.
+Variables use `{{variable}}` syntax and are resolved at run time.
 
 ### `projx run <name> [values...]`
 
@@ -52,13 +124,13 @@ Run a registered template.
 # Pass variable values as arguments
 projx run react my-app
 
-# Interactive mode - prompts for all variables
+# Force interactive mode
 projx run react -i
 ```
 
 ### `projx <name> [values...]`
 
-Shortcut - run any template directly without the `run` command.
+Shortcut for `projx run`.
 
 ```bash
 projx react my-app
@@ -71,11 +143,7 @@ List all registered templates.
 ```bash
 # Table format (default)
 projx list
-
-# With commands shown
-projx list -c
-
-# Plain format
+projx list -c        # show commands
 projx list --no-table
 ```
 
@@ -85,30 +153,30 @@ Interactively select and run a template.
 
 ```bash
 projx select
+projx select -f react   # filter by name
 ```
 
 ### `projx remove <name>`
 
-Remove a registered template.
+Remove a template.
 
 ```bash
-# By name
 projx remove react
-
-# Interactive selection
-projx remove -s
-
-# Skip confirmation
-projx remove react -y
+projx remove -s      # interactive selection
+projx remove -y      # skip confirmation
 ```
 
 ## Examples
 
-### Project Templates
+### Project templates
 
 ```bash
 # React + Vite
-projx add react "pnpm create vite {{name}} --template react-ts" "cd {{name}}" "pnpm install" "code ."
+projx add react \
+  "pnpm create vite {{name}} --template react-ts" \
+  "cd {{name}}" \
+  "pnpm install" \
+  "code ."
 
 # Next.js
 projx add next "pnpm create next-app {{name}}" "cd {{name}}" "code ."
@@ -117,7 +185,7 @@ projx add next "pnpm create next-app {{name}}" "cd {{name}}" "code ."
 projx add express "mkdir {{name}}" "cd {{name}}" "pnpm init -y" "pnpm add express" "code ."
 ```
 
-### Dev Shortcuts
+### Dev shortcuts
 
 ```bash
 # Git quick commit
@@ -131,33 +199,42 @@ projx add dcd "docker compose down"
 projx add ssh-prod "ssh {{user}}@production-server.com"
 ```
 
-### Build & Deploy
+## Not just for projects
 
-```bash
-# Build and deploy
-projx add deploy "pnpm build" "pnpm deploy"
+`projx` works for **any repeatable command sequence**:
 
-# Run tests
-projx add t "pnpm test"
-projx add tw "pnpm test --watch"
+* Git workflows
+* Docker commands
+* SSH shortcuts
+* Build & deploy scripts
+* System utilities
+
+It’s a **command template registry**, not just a project generator.
+
+## Config location
+
+Templates are stored at:
+
+```
+~/.project-registry/config.json
 ```
 
-## Not Just for Projects
+---
 
-While `projx` is great for project scaffolding, it works for **any repeatable command sequence**:
+## 🤝 Contributions
 
-- **Git workflows** - commit, push, branch creation
-- **Docker operations** - build, run, compose commands
-- **SSH connections** - quick access to servers
-- **Build scripts** - compile, test, deploy pipelines
-- **System shortcuts** - any command you run often
+Contributions are welcome! Please follow the standard fork-and-pull-request workflow.
 
-Think of it as a **command template manager** - save any sequence of commands once, run them anytime with dynamic variables.
+## Issues
 
-## Config Location
-
-Templates are stored in `~/.project-registry/config.json`
+If you encounter any issue, please open an issue [here](https://github.com/HichemTab-tech/project-registry/issues).
 
 ## License
 
-MIT
+Distributed under the MIT License. See [`LICENSE`](LICENSE) file for more details.
+
+&copy; 2026 [Hichem Taboukouyout](mailto:hichem.taboukouyout@hichemtab-tech.me)
+
+---
+
+_If you found this package helpful, consider leaving a star! ⭐️_

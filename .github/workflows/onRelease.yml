@@ -12,6 +12,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: latest
+      - name: Install pnpm
+        run: npm install -g pnpm
       - run: pnpm install
       - run: pnpm run build
       - run: pnpm run prepack

@@ -1,7 +1,7 @@
-import {input} from '@inquirer/prompts'
 import {execaCommand, ExecaError} from 'execa'
 
 import {Template} from './config.js'
+import {prompts} from "./prompts.js";
 import {extractVariables, replaceAllVariables} from './variables.js'
 
 export interface RunOptions {
@@ -28,7 +28,7 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
         } else if (interactive || !providedValues[i]) {
             // Prompt for value in interactive mode or if not provided
             const defaultValue = providedValues[i] || ''
-            values[variable] = await input({
+            values[variable] = await prompts.input({
                 default: defaultValue || undefined,
                 message: `${variable}:`,
             })

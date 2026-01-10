@@ -1,7 +1,7 @@
-import {confirm, input} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 
 import {setTemplate, templateExists} from '../utils/config.js'
+import {prompts} from "../utils/prompts.js";
 
 class Add extends Command {
     static args = {
@@ -31,7 +31,7 @@ class Add extends Command {
 
         if (flags.interactive) {
             // Interactive mode: prompt for everything
-            templateName = args.name ?? await input({message: 'Template name:'})
+            templateName = args.name ?? await prompts.input({message: 'Template name:'})
 
             if (!templateName.trim()) {
                 this.error('Template name is required')
@@ -41,7 +41,7 @@ class Add extends Command {
             commands = []
 
             while (true) {
-                const cmd = await input({message: '>'})
+                const cmd = await prompts.input({message: '>'})
                 if (cmd.trim() === '') {
                     break
                 }
@@ -54,7 +54,7 @@ class Add extends Command {
             }
 
             if (!description) {
-                description = await input({message: 'Description (optional):'})
+                description = await prompts.input({message: 'Description (optional):'})
             }
         } else {
             // Non-interactive mode: parse args
@@ -75,7 +75,7 @@ class Add extends Command {
 
         // Check if the template already exists
         if (templateExists(templateName)) {
-            const overwrite = await confirm({
+            const overwrite = await prompts.confirm({
                 default: false,
                 message: `Template "${templateName}" already exists. Overwrite?`,
             })

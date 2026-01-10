@@ -1,8 +1,8 @@
-import {select} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 
 import {Template} from '../utils/config.js'
 import {buildChoices} from "../utils/dry.js";
+import {prompts} from "../utils/prompts.js";
 import {runTemplate} from '../utils/runner.js'
 
 class Select extends Command {
@@ -20,7 +20,7 @@ class Select extends Command {
         if (!choicesResult) return;
         const {choices, templates} = choicesResult
 
-        const selectedName = await select({
+        const selectedName = await prompts.select({
             choices,
             message: 'Select a template to run:',
         })

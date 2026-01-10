@@ -1,8 +1,8 @@
-import {confirm, select} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 
 import {deleteTemplate, templateExists} from '../utils/config.js'
 import {buildChoices} from "../utils/dry.js";
+import {prompts} from "../utils/prompts.js";
 
 class Remove extends Command {
     static args = {
@@ -31,7 +31,7 @@ class Remove extends Command {
             const choicesResult = buildChoices.bind(this)()
             if (!choicesResult) return;
 
-            templateName = await select({
+            templateName = await prompts.select({
                 choices: choicesResult.choices,
                 message: 'Select a template to remove:',
             })
@@ -48,7 +48,7 @@ class Remove extends Command {
 
         if (!flags.yes) {
             // Confirm deletion
-            const confirmed = await confirm({
+            const confirmed = await prompts.confirm({
                 default: false,
                 message: `Remove template "${templateName}"?`,
             })

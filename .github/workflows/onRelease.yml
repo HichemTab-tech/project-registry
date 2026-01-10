@@ -17,5 +17,5 @@ jobs:
       - run: pnpm run prepack
       - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
         with:
-          token: ${{ secrets.NPM_TOKEN }}
+          token: ${{ secrets.NODE_AUTH_TOKEN }}
       - run: pnpm run postpack

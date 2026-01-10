@@ -1,4 +1,4 @@
-# projx
+# project registry - projx
 
 A CLI tool to save and run command templates with variables.
 

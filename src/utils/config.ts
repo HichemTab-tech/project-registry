@@ -1,6 +1,7 @@
 import * as fs from 'node:fs'
 import * as os from 'node:os'
 import * as path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 export interface Template {
     commands: string[]
@@ -20,6 +21,9 @@ export function setConfigDir(dir: string): void {
 const getConfigDir = () => customConfigDir || path.join(os.homedir(), '.project-registry')
 const getConfigFile = () => path.join(getConfigDir(), 'config.json')
 
+const presetsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'presets', 'default.json')
+
+
 function ensureConfigDir(): void {
     const dir = getConfigDir()
     if (!fs.existsSync(dir)) {
@@ -36,10 +40,17 @@ function ensureConfigFile(): void {
     }
 }
 
-function writePresetConfig(): void {
-    const content = fs.readFileSync("./presets/default.json", 'utf8');
-    const preset = JSON.parse(content) as ConfigData
-    saveConfig(preset);
+function loadPreset(): ConfigData {
+    try {
+        const content = fs.readFileSync(presetsPath, 'utf8')
+        return JSON.parse(content) as ConfigData
+    } catch {
+        return {}
+    }
+}
+
+export function writePresetConfig(): void {
+    saveConfig(loadPreset());
 }
 
 export function loadConfig(): ConfigData {

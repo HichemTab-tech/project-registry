@@ -1,1 +1,0 @@
-{"root":["./src/index.ts","./src/commands/add.ts","./src/commands/list.ts","./src/commands/remove.ts","./src/commands/run.ts","./src/commands/select.ts","./src/hooks/command_not_found.ts","./src/utils/config.ts","./src/utils/dry.ts","./src/utils/runner.ts","./src/utils/variables.ts"],"version":"5.9.3"}

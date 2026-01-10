@@ -32,7 +32,14 @@ function ensureConfigFile(): void {
     const file = getConfigFile()
     if (!fs.existsSync(file)) {
         fs.writeFileSync(file, JSON.stringify({}, null, 2), 'utf8')
+        writePresetConfig()
     }
+}
+
+function writePresetConfig(): void {
+    const content = fs.readFileSync("./presets/default.json", 'utf8');
+    const preset = JSON.parse(content) as ConfigData
+    saveConfig(preset);
 }
 
 export function loadConfig(): ConfigData {

@@ -11,6 +11,7 @@ class Select extends Command {
     static examples = ['<%= config.bin %> <%= command.id %>']
 
     async run(): Promise<void> {
+        await this.parse(Select)
         const choicesResult = buildChoices.bind(this)()
         if (!choicesResult) return;
         const {choices, templates} = choicesResult

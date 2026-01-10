@@ -19,6 +19,7 @@ class Remove extends Command {
     // noinspection SqlNoDataSourceInspection
     static flags = {
         select: Flags.boolean({char: 's', description: 'Select template from a list'}),
+        yes: Flags.boolean({allowNo: false, char: 'y', description: 'Skip confirmation prompting'}),
     }
 
     async run(): Promise<void> {
@@ -45,15 +46,17 @@ class Remove extends Command {
             this.error(`Template "${templateName}" not found`)
         }
 
-        // Confirm deletion
-        const confirmed = await confirm({
-            default: false,
-            message: `Remove template "${templateName}"?`,
-        })
+        if (!flags.yes) {
+            // Confirm deletion
+            const confirmed = await confirm({
+                default: false,
+                message: `Remove template "${templateName}"?`,
+            })
 
-        if (!confirmed) {
-            this.log('Aborted')
-            return
+            if (!confirmed) {
+                this.log('Aborted')
+                return
+            }
         }
 
         // Delete the template

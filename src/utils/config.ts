@@ -77,6 +77,8 @@ export function templateExists(name: string): boolean {
     return name in config
 }
 
-export function getAllTemplates(): ConfigData {
-    return loadConfig()
+export function getAllTemplates(filter?: string): ConfigData {
+    const config = loadConfig()
+    if (!filter) return config
+    return Object.fromEntries(Object.entries(config).filter(([name]) => name.toLowerCase().includes(filter.toLowerCase())))
 }

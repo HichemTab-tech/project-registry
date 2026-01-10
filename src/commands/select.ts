@@ -1,5 +1,5 @@
 import {select} from '@inquirer/prompts'
-import {Command} from '@oclif/core'
+import {Command, Flags} from '@oclif/core'
 
 import {Template} from '../utils/config.js'
 import {buildChoices} from "../utils/dry.js";
@@ -10,9 +10,13 @@ class Select extends Command {
 
     static examples = ['<%= config.bin %> <%= command.id %>']
 
+    static flags = {
+        filter: Flags.string({char: 'f', description: 'Filter templates by name (case-insensitive)'})
+    }
+
     async run(): Promise<void> {
-        await this.parse(Select)
-        const choicesResult = buildChoices.bind(this)()
+        const {flags} = await this.parse(Select)
+        const choicesResult = buildChoices.bind(this)(flags.filter?.toLowerCase())
         if (!choicesResult) return;
         const {choices, templates} = choicesResult
 

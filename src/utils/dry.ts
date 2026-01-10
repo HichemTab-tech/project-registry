@@ -2,8 +2,8 @@ import {Command} from "@oclif/core";
 
 import {getAllTemplates} from "./config.js";
 
-export function buildChoices (this: Command) {
-    const templates = getAllTemplates()
+export function buildChoices (this: Command, filter?: string) {
+    const templates = getAllTemplates(filter)
     const names = Object.keys(templates)
 
     if (names.length === 0) {

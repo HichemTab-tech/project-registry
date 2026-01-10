@@ -97,6 +97,9 @@ projx remove react
 
 # Interactive selection
 projx remove -s
+
+# Skip confirmation
+projx remove react -y
 ```
 
 ## Examples

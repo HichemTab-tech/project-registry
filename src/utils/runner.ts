@@ -1,5 +1,5 @@
 import {input} from '@inquirer/prompts'
-import {execaCommand} from 'execa'
+import {execaCommand, ExecaError} from 'execa'
 
 import {Template} from './config.js'
 import {extractVariables, replaceAllVariables} from './variables.js'
@@ -38,29 +38,24 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
     // Replace variables in all commands
     const resolvedCommands = replaceAllVariables(template.commands, values)
 
-    // Execute commands in order
-    for (const command of resolvedCommands) {
-        log(`$ ${command}`)
+    const combinedCommand = resolvedCommands.join(' && ')
+    log(`$ ${combinedCommand}`)
 
-        try {
-            const result = await execaCommand(command, {
-                shell: true,
-                stdio: 'inherit',
-            })
-
-            if (result.exitCode !== 0) {
-                logError(`Command failed with exit code ${result.exitCode}`)
-                return false
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                logError(`Command failed: ${error.message}`)
-            } else {
-                logError('Command failed')
-            }
-
-            return false
+    try {
+        await execaCommand(combinedCommand, {
+            shell: true,
+            stdio: 'inherit',
+        })
+    } catch (error: unknown) {
+        if (error && error instanceof ExecaError && typeof error.exitCode === 'number') {
+            logError(`Command failed with exit code ${error.exitCode}`)
+        } else if (error instanceof Error) {
+            logError(`Command failed: ${error.message}`)
+        } else {
+            logError('Command failed')
         }
+
+        return false
     }
 
     return true

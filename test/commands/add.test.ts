@@ -36,4 +36,9 @@ describe('add', () => {
         const content = JSON.parse(fs.readFileSync(configPath, 'utf8'))
         expect(content['multi-cmd'].commands).to.deep.equal(['echo 1', 'echo 2'])
     })
+
+    it('warns when adding a template with a reserved command name', async () => {
+        const {stderr} = await runCommand(['add', 'list', '"echo 1"'])
+        expect(stderr).to.contain('The template name "list" is reserved')
+    })
 })

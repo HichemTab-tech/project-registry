@@ -1,4 +1,4 @@
-import {Command, Flags} from '@oclif/core'
+import {Flags} from '@oclif/core'
 import chalk from 'chalk'
 import Table from 'cli-table3'
 import stripAnsi from 'strip-ansi'

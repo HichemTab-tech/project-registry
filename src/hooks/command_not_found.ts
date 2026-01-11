@@ -1,6 +1,6 @@
 import {Hook} from '@oclif/core'
 
-import {getTemplate, setDevIfDev, templateExists} from '../utils/config.js'
+import {getTemplate, templateExists} from '../utils/config.js'
 import {runTemplate} from '../utils/runner.js'
 
 const hook: Hook<'command_not_found'> = async function (opts) {
@@ -12,8 +12,6 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     if (!id) {
         return
     }
-
-    setDevIfDev(this.debug);
 
     const parts = id.split(':')
     const templateName = parts[0]

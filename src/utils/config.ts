@@ -34,8 +34,20 @@ export function setIncludePresets(include: boolean): void {
     customConfig.includePresets = include
 }
 
-const getConfigDir = () => customConfig.customDir || path.join(os.homedir(), '.project-registry')
+const getConfigDir = () => {
+    if (customConfig.customDir) return customConfig.customDir
+
+    if (process.env.NODE_ENV === 'development') {
+        const __filename = fileURLToPath(import.meta.url)
+        const __dirname = path.dirname(__filename)
+        return path.resolve(__dirname, '../../test-config-dir')
+    }
+
+    return path.join(os.homedir(), '.project-registry')
+}
+
 const getConfigFile = () => path.join(getConfigDir(), 'config.json')
+
 
 
 function ensureConfigDir(): void {
@@ -106,12 +118,5 @@ export function getAllTemplates(filter?: string): ConfigData {
     return Object.fromEntries(Object.entries(config).filter(([name]) => name.toLowerCase().includes(filter.toLowerCase())))
 }
 
-export function setDevIfDev(debug: (...args: unknown[]) => void) {
-    if (process.env.NODE_ENV === 'development') {
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
-        const devPath = path.resolve(__dirname, "../../test-config-dir");
-        setConfigDir(devPath);
-        debug("Setting config dir to", devPath);
-    }
-}
+
+

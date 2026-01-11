@@ -13,4 +13,6 @@ package-lock.json
 
 workbench/*
 !workbench/.gitkeep
+test-config-dir/*
+!test-config-dir/.gitkeep
 tsconfig.tsbuildinfo

@@ -54,6 +54,23 @@ projx add react \
   "pnpm install"
 ```
 
+### Variables with description
+
+You can provide a description for a variable to make the prompt more helpful using `{{variable::description}}` syntax:
+
+```bash
+projx add my-template "echo {{name::Enter the project name}}"
+```
+
+If you use the same variable multiple times, you only need to add the description once:
+
+```bash
+projx add my-template \
+  "echo Creating {{name::Project Name}}" \
+  "mkdir {{name}}" \
+  "cd {{name}}"
+```
+
 Run it by passing values:
 
 ```bash

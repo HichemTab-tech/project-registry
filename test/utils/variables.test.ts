@@ -33,6 +33,40 @@ describe('variables', () => {
       const result = extractVariables([])
       expect([...result.keys()]).to.deep.equal([])
     })
+
+    it('should extract variable with description', () => {
+      const result = extractVariables(['echo {{name::project name}}'])
+      expect([...result.keys()]).to.deep.equal(['name'])
+      expect(result.get('name')).to.deep.equal({
+        description: 'project name',
+        replacements: ['name::project name']
+      })
+    })
+
+    it('should extract variable mixed with and without description', () => {
+      // Order: without description first
+      let result = extractVariables(['echo {{name}}', 'echo {{name::project name}}'])
+      expect([...result.keys()]).to.deep.equal(['name'])
+      expect(result.get('name')).to.deep.equal({
+        description: 'project name',
+        replacements: ['name', 'name::project name']
+      })
+
+      // Order: with description first
+      result = extractVariables(['echo {{name::project name}}', 'echo {{name}}'])
+      expect([...result.keys()]).to.deep.equal(['name'])
+      expect(result.get('name')).to.deep.equal({
+        description: 'project name',
+        replacements: ['name::project name', 'name']
+      })
+    })
+
+    it('should handle multiple occurrences with different descriptions (last wins or merge?)', () => {
+         // Current implementation updates description if found. So last one with description wins.
+        const result = extractVariables(['{{name::desc1}}', '{{name::desc2}}'])
+        expect(result.get('name')?.description).to.equal('desc2')
+        expect(result.get('name')?.replacements).to.include.members(['name::desc1', 'name::desc2'])
+    })
   })
 
   describe('replaceVariables', () => {
@@ -48,6 +82,16 @@ describe('variables', () => {
         ver: {replacements: ['ver'], result: '1.0.0'},
       })
       expect(result).to.equal('npm test --version 1.0.0')
+    })
+
+    it('should replace variables with descriptions', () => {
+        const result = replaceVariables('echo {{name::project name}} && cd {{name}}', {
+            name: {
+                replacements: ['name::project name', 'name'],
+                result: 'my-project'
+            }
+        })
+        expect(result).to.equal('echo my-project && cd my-project')
     })
 
     it('should keep unreplaced variables as-is', () => {

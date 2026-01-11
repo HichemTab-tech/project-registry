@@ -1,6 +1,7 @@
 import * as fs from 'node:fs'
 import * as os from 'node:os'
 import * as path from 'node:path'
+import {fileURLToPath} from "node:url";
 
 import {presets} from "../presets/default.js";
 
@@ -103,4 +104,14 @@ export function getAllTemplates(filter?: string): ConfigData {
     const config = loadConfig()
     if (!filter) return config
     return Object.fromEntries(Object.entries(config).filter(([name]) => name.toLowerCase().includes(filter.toLowerCase())))
+}
+
+export function setDevIfDev(debug: (...args: unknown[]) => void) {
+    if (process.env.NODE_ENV === 'development') {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        const devPath = path.resolve(__dirname, "../../test-config-dir");
+        setConfigDir(devPath);
+        debug("Setting config dir to", devPath);
+    }
 }

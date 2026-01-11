@@ -1,9 +1,10 @@
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Flags} from '@oclif/core'
 
+import {BaseCommand} from "../BaseCommand.js";
 import {getTemplate, templateExists} from '../utils/config.js'
 import {runTemplate} from '../utils/runner.js'
 
-class Run extends Command {
+class Run extends BaseCommand {
     static args = {
         name: Args.string({description: 'Template name to run', required: true}),
     }

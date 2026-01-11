@@ -1,11 +1,12 @@
-import {Command, Flags} from '@oclif/core'
+import {Flags} from '@oclif/core'
 
+import {BaseCommand} from "../BaseCommand.js";
 import {Template} from '../utils/config.js'
 import {buildChoices} from "../utils/dry.js";
 import {prompts} from "../utils/prompts.js";
 import {runTemplate} from '../utils/runner.js'
 
-class Select extends Command {
+class Select extends BaseCommand {
     static description = 'Select and run a template interactively'
 
     static examples = ['<%= config.bin %> <%= command.id %>']

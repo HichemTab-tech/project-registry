@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import {execaCommand, ExecaError} from 'execa'
 
 import {Template} from './config.js'
@@ -18,21 +19,33 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
     const variables = extractVariables(template.commands)
 
     // Build values map
-    const values: Record<string, string> = {}
+    const values: Record<string, {
+        replacements: string[],
+        result: string
+    }> = {}
 
-    for (const [i, variable] of variables.entries()) {
+    let i = 0;
+    for (const [key, variable] of variables.entries()) {
 
         if (providedValues[i] && !interactive) {
             // Use provided value if available and not in interactive mode
-            values[variable] = providedValues[i]
+            values[key] = {
+                replacements: variable.replacements,
+                result: providedValues[i]
+            }
         } else if (interactive || !providedValues[i]) {
             // Prompt for value in interactive mode or if not provided
             const defaultValue = providedValues[i] || ''
-            values[variable] = await prompts.input({
-                default: defaultValue || undefined,
-                message: `${variable}:`,
-            })
+            values[key] = {
+                replacements: variable.replacements,
+                result: await prompts.input({
+                    default: defaultValue || undefined,
+                    message: `${key}:${variable.description ? ` ${chalk.grey(`(${variable.description})`)}` : ""}`,
+                })
+            }
         }
+
+        i++;
     }
 
     // Replace variables in all commands
@@ -40,6 +53,7 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
 
     const combinedCommand = resolvedCommands.join(' && ')
     log(`$ ${combinedCommand}`)
+
 
     try {
         await execaCommand(combinedCommand, {

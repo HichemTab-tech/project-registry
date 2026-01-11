@@ -1,12 +1,13 @@
-import {Command, Flags} from '@oclif/core'
+import {Flags} from '@oclif/core'
 import chalk from 'chalk'
 import Table from 'cli-table3'
 import stripAnsi from 'strip-ansi'
 
+import {BaseCommand} from "../BaseCommand.js";
 import {getAllTemplates} from '../utils/config.js'
 import {truncate} from "../utils/dry.js";
 
-class List extends Command {
+class List extends BaseCommand {
     static description = 'List all registered templates'
 
     static examples = [

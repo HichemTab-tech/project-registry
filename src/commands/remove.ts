@@ -1,10 +1,11 @@
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Flags} from '@oclif/core'
 
+import {BaseCommand} from "../BaseCommand.js";
 import {deleteTemplate, templateExists} from '../utils/config.js'
 import {buildChoices} from "../utils/dry.js";
 import {prompts} from "../utils/prompts.js";
 
-class Remove extends Command {
+class Remove extends BaseCommand {
     static args = {
         name: Args.string({description: 'Template name to remove', required: false}),
     }

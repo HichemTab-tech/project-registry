@@ -19,7 +19,7 @@ describe('add', () => {
     })
 
     it('runs add with arguments', async () => {
-        const {stdout} = await runCommand(['add', 'new-template', '"echo hello"'])
+        const {stdout} = await runCommand(['add', 'new-template', '"echo hello"', '-d', 'desc'])
         expect(stdout).to.contain('Template "new-template" added')
 
         const configPath = path.join(testDir, 'config.json')
@@ -29,11 +29,16 @@ describe('add', () => {
     })
 
     it('runs add with arguments and multiple commands', async () => {
-        const {stdout} = await runCommand(['add', 'multi-cmd', '"echo 1"', '"echo 2"'])
+        const {stdout} = await runCommand(['add', 'multi-cmd', '"echo 1"', '"echo 2"', '-d', 'desc'])
         expect(stdout).to.contain('Template "multi-cmd" added')
 
         const configPath = path.join(testDir, 'config.json')
         const content = JSON.parse(fs.readFileSync(configPath, 'utf8'))
         expect(content['multi-cmd'].commands).to.deep.equal(['echo 1', 'echo 2'])
+    })
+
+    it('warns when adding a template with a reserved command name', async () => {
+        const {stderr} = await runCommand(['add', 'list', '"echo 1"', '-d', 'desc'])
+        expect(stderr).to.contain('The template name "list" is reserved')
     })
 })

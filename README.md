@@ -131,7 +131,7 @@ projx add <name> "command1" "command2" "command3"
 projx add <name> -d "My template description" "command1" "command2"
 
 # Interactive mode
-projx add -i
+projx add
 ```
 
 Variables use `{{variable}}` syntax and are resolved at run time.

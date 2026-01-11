@@ -1,4 +1,5 @@
 import {Args, Flags} from '@oclif/core'
+import chalk from "chalk";
 
 import {BaseCommand} from "../BaseCommand.js";
 import {setTemplate, templateExists} from '../utils/config.js'
@@ -18,7 +19,6 @@ class Add extends BaseCommand {
 
     static flags = {
         description: Flags.string({char: 'd', description: 'Template description'}),
-        interactive: Flags.boolean({char: 'i', description: 'Interactive mode'}),
     }
 
     static strict = false // Allow variable number of arguments
@@ -26,21 +26,27 @@ class Add extends BaseCommand {
     async run(): Promise<void> {
         const {args, argv, flags} = await this.parse(Add)
 
-        let templateName: string
-        let commands: string[]
         let {description} = flags
 
-        if (flags.interactive) {
-            // Interactive mode: prompt for everything
-            templateName = args.name ?? await prompts.input({message: 'Template name:'})
+        const templateName = args.name ?? await prompts.input({message: 'Template name:'})
 
-            if (!templateName.trim()) {
-                this.error('Template name is required')
-            }
+        if (!templateName.trim()) {
+            this.error('Template name is required')
+        }
 
-            this.log('Enter commands (one per line, empty line to finish):')
-            commands = []
+        const reservedCommands = Object.values(this.config.commands).map(c => c.id);
 
+        if (reservedCommands.includes(templateName)) {
+            this.warn(`The template name "${templateName}" is reserved. To use it in future, you should use the "run" command like ${chalk.yellow(`projx run ${templateName}`)}, instead of ${chalk.yellow(`projx ${templateName}`)}.`)
+        }
+
+        this.log('Enter commands (one per line, empty line to finish):')
+
+        // Get commands from remaining arguments (argv includes all args including the name)
+        const allArgs = argv as string[]
+        const commands = allArgs.slice(1) // Skip the template name
+
+        if (commands.length === 0) {
             while (true) {
                 const cmd = await prompts.input({message: '>'})
                 if (cmd.trim() === '') {
@@ -49,29 +55,14 @@ class Add extends BaseCommand {
 
                 commands.push(cmd)
             }
+        }
 
-            if (commands.length === 0) {
-                this.error('At least one command is required')
-            }
+        if (commands.length === 0) {
+            this.error('At least one command is required')
+        }
 
-            if (!description) {
-                description = await prompts.input({message: 'Description (optional):'})
-            }
-        } else {
-            // Non-interactive mode: parse args
-            if (!args.name) {
-                this.error('Template name is required. Use --interactive for interactive mode.')
-            }
-
-            templateName = args.name
-
-            // Get commands from remaining arguments (argv includes all args including the name)
-            const allArgs = argv as string[]
-            commands = allArgs.slice(1) // Skip the template name
-
-            if (commands.length === 0) {
-                this.error('At least one command is required')
-            }
+        if (!description) {
+            description = await prompts.input({message: 'Description (optional):'})
         }
 
         // Check if the template already exists

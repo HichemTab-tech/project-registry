@@ -15,7 +15,8 @@ export function extractVariables(commands: string[]): Map<string, {description: 
                     // eslint-disable-next-line max-depth
                     if (variables.has(name)) {
                         variables.get(name)!.replacements.push(text)
-                        variables.get(name)!.description = description
+                        // eslint-disable-next-line max-depth
+                        if (description) variables.get(name)!.description = description
                     }
                     else{
                         variables.set(name, {description, replacements: [text]})

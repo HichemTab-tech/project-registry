@@ -57,12 +57,12 @@ function ensureConfigDir(): void {
     }
 }
 
-function ensureConfigFile(): void {
+function ensureConfigFile(withoutPreset = false): void {
     ensureConfigDir()
     const file = getConfigFile()
     if (!fs.existsSync(file)) {
         fs.writeFileSync(file, JSON.stringify({}, null, 2), 'utf8')
-        if (customConfig.includePresets) writePresetConfig()
+        if (customConfig.includePresets && !withoutPreset) writePresetConfig()
     }
 }
 
@@ -70,8 +70,8 @@ export function writePresetConfig(): void {
     saveConfig(presets);
 }
 
-export function loadConfig(): ConfigData {
-    ensureConfigFile()
+export function loadConfig(withoutPreset = false): ConfigData {
+    ensureConfigFile(withoutPreset)
     const content = fs.readFileSync(getConfigFile(), 'utf8')
     try {
         return JSON.parse(content) as ConfigData

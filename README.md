@@ -11,6 +11,9 @@ A CLI tool to save and run command templates with variables.
 
 ## Installation
 
+**Requirements:**
+- Node.js version **21.0.0** or higher.
+
 ```bash
 npm install -g project-registry
 ```
@@ -184,6 +187,33 @@ Remove a template.
 projx remove react
 projx remove -s      # interactive selection
 projx remove -y      # skip confirmation
+```
+
+### `projx export <path>`
+
+Export your template registry to a JSON file (backup).
+
+```bash
+# Export to a file
+projx export backup.json
+
+# Export to a directory (creates project-registry.json)
+projx export ./backups/
+```
+
+### `projx import <path>|<url>`
+
+Import templates from a JSON file or URL.
+
+```bash
+# Import from local file (merges with existing)
+projx import backup.json
+
+# Import from URL
+projx import https://example.com/shared-templates.json
+
+# Import from file and replace ALL existing templates
+projx import backup.json --replace
 ```
 
 ## Examples

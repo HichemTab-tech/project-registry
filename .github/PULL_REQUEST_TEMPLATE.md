@@ -2,14 +2,10 @@
 
 What does this PR do?
 
----
-
 ## Changes
 
 * Change 1
 * Change 2
-
----
 
 ## Type
 
@@ -17,8 +13,6 @@ What does this PR do?
 * [ ] Feature
 * [ ] Refactor
 * [ ] Docs
-
----
 
 ## Testing
 
@@ -29,8 +23,6 @@ How was this tested?
 ## Notes
 
 Anything else reviewers should know.
-
----
 
 ## Related
 

@@ -25,20 +25,38 @@ class Import extends BaseCommand {
     // eslint-disable-next-line complexity
     async run(): Promise<void> {
         const {args, flags} = await this.parse(Import)
-        const sourcePath = path.resolve(args.path)
-
-        if (!fs.existsSync(sourcePath)) {
-            this.error(`File not found: ${sourcePath}`)
-        }
-
         let rawData: string
-        try {
-            rawData = fs.readFileSync(sourcePath, 'utf8')
-        } catch (error: unknown) {
-            if (error && error instanceof Error) {
-                this.error(`Failed to read file: ${error.message}`)
-            } else {
-                this.error('Failed to read file due to an unknown error')
+
+        // noinspection HttpUrlsUsage
+        if (args.path.startsWith('http://') || args.path.startsWith('https://')) {
+            try {
+                const response = await fetch(args.path)
+                if (!response.ok) {
+                    this.error(`Failed to fetch URL: ${response.statusText} (${response.status})`)
+                }
+
+                rawData = await response.text()
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    this.error(`Failed to fetch URL: ${error.message}`)
+                } else {
+                    this.error('Failed to fetch URL due to an unknown error')
+                }
+            }
+        } else {
+            const sourcePath = path.resolve(args.path)
+            if (!fs.existsSync(sourcePath)) {
+                this.error(`File not found: ${sourcePath}`)
+            }
+
+            try {
+                rawData = fs.readFileSync(sourcePath, 'utf8')
+            } catch (error: unknown) {
+                if (error && error instanceof Error) {
+                    this.error(`Failed to read file: ${error.message}`)
+                } else {
+                    this.error('Failed to read file due to an unknown error')
+                }
             }
         }
 

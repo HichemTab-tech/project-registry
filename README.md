@@ -216,6 +216,21 @@ projx import https://example.com/shared-templates.json
 projx import backup.json --replace
 ```
 
+### `projx self-update [package-manager]`
+
+Update the CLI to the latest version.
+
+```bash
+# Update using pnpm (default)
+projx self-update
+
+# Update using npm
+projx self-update npm
+
+# Update using yarn
+projx self-update yarn
+```
+
 ## Examples
 
 ### Project templates

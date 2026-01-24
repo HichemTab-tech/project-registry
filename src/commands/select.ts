@@ -7,6 +7,8 @@ import {prompts} from "../utils/prompts.js";
 import {runTemplate} from '../utils/runner.js'
 
 class Select extends BaseCommand {
+    static aliases = ['s']
+
     static description = 'Select and run a template interactively'
 
     static examples = ['<%= config.bin %> <%= command.id %>']

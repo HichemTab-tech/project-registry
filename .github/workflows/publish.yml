@@ -2,22 +2,26 @@ name: Publish Package to npmjs
 on:
   release:
     types: [published]
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '23.x'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Install latest npm
+        run: npm install -g npm@latest
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -29,13 +33,4 @@ jobs:
         run: pnpm run build
 
       - name: Publish to npm
-        run: |
-          if [ "${{ github.event.release.prerelease }}" == "true" ]; then
-            echo "Publishing as beta (pre-release)..."
-            pnpm publish --tag beta --access public --no-git-checks
-          else
-            echo "Publishing as normal release..."
-            pnpm publish --access public --no-git-checks
-          fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+        run: pnpm publish --access public --no-git-checks

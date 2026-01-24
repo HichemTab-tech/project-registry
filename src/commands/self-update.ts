@@ -55,10 +55,10 @@ class SelfUpdate extends BaseCommand {
             this.log(stdout.toString());
         } catch (error) {
             if (error instanceof Error) {
-                this.error(`Failed to update projx: ${error.message}`);
+                this.error(`Failed to update project-registry: ${error.message}`);
             }
 
-            this.error(`Failed to update projx.`)
+            this.error(`Failed to update project-registry.`)
         }
 
         this.log('Update complete. Please restart your terminal session if necessary.')

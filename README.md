@@ -99,7 +99,7 @@ This is the fastest way if you remember the name.
 If you don’t remember the exact name:
 
 ```bash
-projx select
+projx select # or projx s
 ```
 
 You’ll get a numbered list and can pick one.

@@ -15,6 +15,11 @@ class SelfUpdate extends BaseCommand {
 
     static examples = ['<%= config.bin %> <%= command.id %>']
 
+    // Visible for testing
+    exec(command: string): Buffer {
+        return execSync(command)
+    }
+
     async run(): Promise<void> {
         const {args} = await this.parse(SelfUpdate)
 
@@ -45,7 +50,7 @@ class SelfUpdate extends BaseCommand {
         }
 
         try {
-            const stdout = execSync(command);
+            const stdout = this.exec(command);
 
             this.log(stdout.toString());
         } catch (error) {

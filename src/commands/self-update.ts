@@ -30,17 +30,17 @@ class SelfUpdate extends BaseCommand {
         let command: string|undefined;
         switch (packageManager) {
             case 'npm': {
-                command = 'npm install -g projx@latest';
+                command = 'npm install -g project-registry@latest';
                 break;
             }
 
             case 'pnpm': {
-                command = 'pnpm add projx@latest -g';
+                command = 'pnpm add project-registry@latest -g';
                 break;
             }
 
             case 'yarn': {
-                command = 'yarn global add projx@latest';
+                command = 'yarn global add project-registry@latest';
                 break;
             }
         }
@@ -55,10 +55,10 @@ class SelfUpdate extends BaseCommand {
             this.log(stdout.toString());
         } catch (error) {
             if (error instanceof Error) {
-                this.error(`Failed to update projx: ${error.message}`);
+                this.error(`Failed to update project-registry: ${error.message}`);
             }
 
-            this.error(`Failed to update projx.`)
+            this.error(`Failed to update project-registry.`)
         }
 
         this.log('Update complete. Please restart your terminal session if necessary.')

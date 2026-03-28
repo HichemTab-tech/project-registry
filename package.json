@@ -25,14 +25,14 @@
     "@types/mocha": "^10",
     "@types/node": "^25",
     "chai": "^6",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-oclif": "^6",
     "eslint-config-prettier": "^10",
     "mocha": "^11",
     "oclif": "^4",
     "shx": "^0.4.0",
     "ts-node": "^10",
-    "typescript": "^5"
+    "typescript": "^6"
   },
   "engines": {
     "node": ">=21.0.0"

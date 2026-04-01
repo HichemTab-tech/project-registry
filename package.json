@@ -8,31 +8,31 @@
   },
   "bugs": "https://github.com/HichemTab-tech/project-registry/issues",
   "dependencies": {
-    "@inquirer/prompts": "^8.1.0",
-    "@oclif/core": "^4",
-    "@oclif/plugin-help": "^6",
-    "@oclif/plugin-plugins": "^5",
+    "@inquirer/prompts": "^8.3.2",
+    "@oclif/core": "^4.10.3",
+    "@oclif/plugin-help": "^6.2.41",
+    "@oclif/plugin-plugins": "^5.4.59",
     "chalk": "^5.6.2",
     "cli-table3": "^0.6.5",
     "execa": "^9.6.1",
-    "strip-ansi": "^7.1.2"
+    "strip-ansi": "^7.2.0"
   },
   "devDependencies": {
-    "@eslint/compat": "^2",
+    "@eslint/compat": "^2.0.3",
     "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4",
-    "@types/chai": "^5",
-    "@types/mocha": "^10",
-    "@types/node": "^25",
-    "chai": "^6",
-    "eslint": "^10",
-    "eslint-config-oclif": "^6",
-    "eslint-config-prettier": "^10",
-    "mocha": "^11",
-    "oclif": "^4",
+    "@oclif/test": "^4.1.17",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.5.0",
+    "chai": "^6.2.2",
+    "eslint": "^10.1.0",
+    "eslint-config-oclif": "^6.0.154",
+    "eslint-config-prettier": "^10.1.8",
+    "mocha": "^11.7.5",
+    "oclif": "^4.22.96",
     "shx": "^0.4.0",
-    "ts-node": "^10",
-    "typescript": "^6"
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
   },
   "engines": {
     "node": ">=21.0.0"
@@ -67,7 +67,6 @@
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "pnpm run lint",
     "prepack": "oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"

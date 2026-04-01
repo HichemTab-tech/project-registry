@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import {execaCommand, ExecaError} from 'execa'
+import {execa, execaCommand, ExecaError} from 'execa'
 
 import {Template} from './config.js'
 import {prompts} from "./prompts.js";
@@ -10,6 +10,29 @@ export interface RunOptions {
     log: (message: string) => void
     logError: (message: string) => void
     providedValues?: string[]
+}
+
+export interface ShellExecutionPlan {
+    args?: string[]
+    command: string
+    shell?: true
+}
+
+export function createShellExecutionPlan(command: string, platform = process.platform, userShell = process.env.SHELL): ShellExecutionPlan {
+    if (platform === 'win32') {
+        return {command, shell: true}
+    }
+
+    const resolvedShell = userShell?.trim()
+
+    if (!resolvedShell) {
+        return {command, shell: true}
+    }
+
+    return {
+        args: ['-i', '-c', command],
+        command: resolvedShell,
+    }
 }
 
 export async function runTemplate(template: Template, options: RunOptions): Promise<boolean> {
@@ -56,10 +79,14 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
 
 
     try {
-        await execaCommand(combinedCommand, {
-            shell: true,
-            stdio: 'inherit',
-        })
+        const executionPlan = createShellExecutionPlan(combinedCommand)
+
+        await (executionPlan.args ? execa(executionPlan.command, executionPlan.args, {
+                stdio: 'inherit',
+            }) : execaCommand(executionPlan.command, {
+                shell: executionPlan.shell ?? true,
+                stdio: 'inherit',
+            }));
     } catch (error: unknown) {
         if (error && error instanceof ExecaError && typeof error.exitCode === 'number') {
             logError(`Command failed with exit code ${error.exitCode}`)

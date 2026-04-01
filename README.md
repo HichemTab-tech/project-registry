@@ -143,6 +143,8 @@ Variables use `{{variable}}` syntax and are resolved at run time.
 
 Run a registered template.
 
+On Unix-like systems, templates are executed through your current shell from `$SHELL` in interactive mode when available, so aliases and shell functions from your normal CLI are available there too.
+
 ```bash
 # Pass variable values as arguments
 projx run react my-app

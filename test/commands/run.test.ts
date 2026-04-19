@@ -28,7 +28,8 @@ describe('run', () => {
         }
         fs.writeFileSync(configPath, JSON.stringify(configData))
 
-        const {stdout} = await runCommand(['run', 'test-run'])
+        const {stdout, stderr} = await runCommand(['run', 'test-run'])
+        expect(stderr).to.contain('xcute')
         expect(stdout).to.contain('run test output')
     })
 })

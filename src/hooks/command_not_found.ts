@@ -1,10 +1,13 @@
 import {Hook} from '@oclif/core'
 
 import {getTemplate, templateExists} from '../utils/config.js'
+import {emitDeprecationNotice} from '../utils/deprecation.js'
 import {runTemplate} from '../utils/runner.js'
 
 const hook: Hook<'command_not_found'> = async function (opts) {
     const {id} = opts
+
+    emitDeprecationNotice((message) => console.error(message))
 
     // The id is the command that was not found
     // oclif joins command parts with ':', e.g., "react:my-app" for "projx react my-app"

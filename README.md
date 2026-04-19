@@ -18,7 +18,7 @@ This project has been renamed to **xcute**.
 npm i -g xcute
 ```
 
-For more info check https://github.com/HichemTab-tech/xcute/blob/1f2cdbc4a0f3bc5a8043340703491fdbd2fd8d6b/WHY.md
+For migration guide check https://github.com/HichemTab-tech/xcute/blob/0.6.0/MIGRATION.md
 
 ## Installation
 

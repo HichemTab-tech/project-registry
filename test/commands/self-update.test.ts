@@ -26,27 +26,27 @@ describe('self-update', () => {
         expect(stderr).to.contain('xcute')
         expect(stdout).to.contain('Updating from:')
         expect(stdout).to.contain('mock output')
-        expect(executedCommands).to.include('pnpm add project-registry@latest -g')
+        expect(executedCommands).to.include('pnpm add xcute@latest -g')
     })
 
     it('runs self-update with npm', async () => {
         await runCommand(['self-update', 'npm'])
-        expect(executedCommands).to.include('npm install -g project-registry@latest')
+        expect(executedCommands).to.include('npm install -g xcute@latest')
     })
 
     it('runs self-update with yarn', async () => {
         await runCommand(['self-update', 'yarn'])
-        expect(executedCommands).to.include('yarn global add project-registry@latest')
+        expect(executedCommands).to.include('yarn global add xcute@latest')
     })
 
     it('runs self-update with pnpm explicit', async () => {
         await runCommand(['self-update', 'pnpm'])
-        expect(executedCommands).to.include('pnpm add project-registry@latest -g')
+        expect(executedCommands).to.include('pnpm add xcute@latest -g')
     })
 
     it('fails gracefully on error', async () => {
         SelfUpdate.prototype.exec = () => { throw new Error('fail'); }
         const {error} = await runCommand(['self-update'])
-        expect(error?.message).to.contain('Failed to update project-registry: fail')
+        expect(error?.message).to.contain('Failed to update xcute: fail')
     })
 })

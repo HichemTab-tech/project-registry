@@ -43,7 +43,7 @@ describe('export', () => {
   it('exports registry to a directory', async () => {
     const {stdout} = await runCommand(['export', outputDir])
     
-    const expectedFile = path.join(outputDir, 'project-registry.json')
+    const expectedFile = path.join(outputDir, 'xcute.json')
     expect(stdout).to.contain(`Registry exported to ${expectedFile}`)
     expect(fs.existsSync(expectedFile)).to.be.true
     

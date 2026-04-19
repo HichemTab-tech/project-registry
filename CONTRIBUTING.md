@@ -6,7 +6,7 @@ This project is intentionally simple, and the contribution process reflects that
 ## Before contributing
 
 * Check existing issues first:
-  [https://github.com/HichemTab-tech/project-registry/issues](https://github.com/HichemTab-tech/project-registry/issues)
+  [https://github.com/HichemTab-tech/xcute/issues](https://github.com/HichemTab-tech/xcute/issues)
 * If your idea or bug isn’t listed, open a new issue and explain it briefly.
 * If you’re unsure, opening an issue **before coding** is totally fine.
 
@@ -17,7 +17,7 @@ This project is intentionally simple, and the contribution process reflects that
 
 That’s it.
 
-Long version here: [https://github.com/HichemTab-tech/project-registry/blob/master/CODE_OF_CONDUCT.md](https://github.com/HichemTab-tech/project-registry/blob/main/CODE_OF_CONDUCT.md)
+Long version here: [https://github.com/HichemTab-tech/xcute/blob/master/CODE_OF_CONDUCT.md](https://github.com/HichemTab-tech/xcute/blob/main/CODE_OF_CONDUCT.md)
 
 ## Tech stack (important)
 
@@ -38,8 +38,8 @@ You **don’t need deep oclif knowledge** to contribute — most changes are str
 2. Clone your fork:
 
     ```bash
-    git clone https://github.com/YOUR_USERNAME/project-registry
-    cd project-registry
+    git clone https://github.com/YOUR_USERNAME/xcute
+    cd xcute
     ```
 
 3. Install dependencies:

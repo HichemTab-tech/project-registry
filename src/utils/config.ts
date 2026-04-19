@@ -43,7 +43,7 @@ const getConfigDir = () => {
         return path.resolve(__dirname, '../../test-config-dir')
     }
 
-    return path.join(os.homedir(), '.project-registry')
+    return path.join(os.homedir(), '.xcute')
 }
 
 const getConfigFile = () => path.join(getConfigDir(), 'config.json')

@@ -1,13 +1,13 @@
-# project-registry – `projx`
+# xcute – `projx`
 
 A CLI tool to save and run command templates with variables.
 
-[![Version](https://img.shields.io/npm/v/project-registry.svg)](https://npmjs.org/package/project-registry)
-[![Downloads/week](https://img.shields.io/npm/dw/project-registry.svg)](https://npmjs.org/package/project-registry)
-[![License](https://img.shields.io/npm/l/project-registry.svg)](https://github.com/HichemTab-tech/project-registry/blob/master/LICENSE)
+[![Version](https://img.shields.io/npm/v/xcute.svg)](https://npmjs.org/package/xcute)
+[![Downloads/week](https://img.shields.io/npm/dw/xcute.svg)](https://npmjs.org/package/xcute)
+[![License](https://img.shields.io/npm/l/xcute.svg)](https://github.com/HichemTab-tech/xcute/blob/master/LICENSE)
 
 
-![project-registry banner](assets/banner.png)
+![xcute banner](assets/banner.png)
 
 # ⚠️ Deprecated
 
@@ -26,13 +26,13 @@ For migration guide check https://github.com/HichemTab-tech/xcute/blob/0.6.0/MIG
 - Node.js version **21.0.0** or higher.
 
 ```bash
-npm install -g project-registry
+npm install -g xcute
 ```
 
 or
 
 ```bash
-pnpm add -g project-registry
+pnpm add -g xcute
 ```
 
 
@@ -230,7 +230,7 @@ Export your template registry to a JSON file (backup).
 # Export to a file
 projx export backup.json
 
-# Export to a directory (creates project-registry.json)
+# Export to a directory (creates xcute.json)
 projx export ./backups/
 ```
 
@@ -314,7 +314,7 @@ It’s a **command template registry**, not just a project generator.
 Templates are stored at:
 
 ```
-~/.project-registry/config.json
+~/.xcute/config.json
 ```
 
 ---
@@ -325,7 +325,7 @@ Contributions are welcome! Please follow the standard fork-and-pull-request work
 
 ## Issues
 
-If you encounter any issue, please open an issue [here](https://github.com/HichemTab-tech/project-registry/issues).
+If you encounter any issue, please open an issue [here](https://github.com/HichemTab-tech/xcute/issues).
 
 ## License
 

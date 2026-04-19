@@ -27,7 +27,7 @@ class Export extends BaseCommand {
         try {
             const stats = fs.statSync(targetPath)
             if (stats.isDirectory()) {
-                targetPath = path.join(targetPath, 'project-registry.json')
+                targetPath = path.join(targetPath, 'xcute.json')
             }
         } catch (error: unknown) {
             // If file/dir doesn't exist, we treat it as the target file path

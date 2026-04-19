@@ -30,17 +30,17 @@ class SelfUpdate extends BaseCommand {
         let command: string|undefined;
         switch (packageManager) {
             case 'npm': {
-                command = 'npm install -g project-registry@latest';
+                command = 'npm install -g xcute@latest';
                 break;
             }
 
             case 'pnpm': {
-                command = 'pnpm add project-registry@latest -g';
+                command = 'pnpm add xcute@latest -g';
                 break;
             }
 
             case 'yarn': {
-                command = 'yarn global add project-registry@latest';
+                command = 'yarn global add xcute@latest';
                 break;
             }
         }
@@ -55,10 +55,10 @@ class SelfUpdate extends BaseCommand {
             this.log(stdout.toString());
         } catch (error) {
             if (error instanceof Error) {
-                this.error(`Failed to update project-registry: ${error.message}`);
+                this.error(`Failed to update xcute: ${error.message}`);
             }
 
-            this.error(`Failed to update project-registry.`)
+            this.error(`Failed to update xcute.`)
         }
 
         this.log('Update complete. Please restart your terminal session if necessary.')

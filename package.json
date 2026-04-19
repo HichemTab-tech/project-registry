@@ -1,12 +1,12 @@
 {
-  "name": "project-registry",
-  "description": "A developer CLI that starts projects from named templates backed by shell commands. (deprecated - check xcute)",
+  "name": "xcute",
+  "description": "Execute reusable command workflows from a single CLI.",
   "version": "0.6.0",
   "author": "Hichem Taboukouyout",
   "bin": {
     "projx": "./bin/run.js"
   },
-  "bugs": "https://github.com/HichemTab-tech/project-registry/issues",
+  "bugs": "https://github.com/HichemTab-tech/xcute/issues",
   "dependencies": {
     "@inquirer/prompts": "^8.3.2",
     "@oclif/core": "^4.10.3",
@@ -42,7 +42,7 @@
     "./dist",
     "./oclif.manifest.json"
   ],
-  "homepage": "https://github.com/HichemTab-tech/project-registry",
+  "homepage": "https://github.com/HichemTab-tech/xcute",
   "keywords": [
     "oclif"
   ],
@@ -62,7 +62,7 @@
     ],
     "topicSeparator": " "
   },
-  "repository": "HichemTab-tech/project-registry",
+  "repository": "HichemTab-tech/xcute",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",

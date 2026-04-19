@@ -34,7 +34,7 @@ export function setIncludePresets(include: boolean): void {
     customConfig.includePresets = include
 }
 
-const getConfigDir = () => {
+export const getConfigDir = () => {
     if (customConfig.customDir) return customConfig.customDir
 
     if (process.env.NODE_ENV === 'development') {
@@ -46,7 +46,7 @@ const getConfigDir = () => {
     return path.join(os.homedir(), '.xcute')
 }
 
-const getConfigFile = () => path.join(getConfigDir(), 'config.json')
+export const getConfigFile = () => path.join(getConfigDir(), 'config.json')
 
 
 

@@ -5,13 +5,13 @@ import {fileURLToPath} from "node:url";
 
 import {presets} from "../presets/default.js";
 
-export interface Template {
+export interface Action {
     commands: string[]
     description?: string
 }
 
 export interface ConfigData {
-    [key: string]: Template
+    [key: string]: Action
 }
 
 const customConfig: {
@@ -34,7 +34,7 @@ export function setIncludePresets(include: boolean): void {
     customConfig.includePresets = include
 }
 
-const getConfigDir = () => {
+export const getConfigDir = () => {
     if (customConfig.customDir) return customConfig.customDir
 
     if (process.env.NODE_ENV === 'development') {
@@ -43,10 +43,10 @@ const getConfigDir = () => {
         return path.resolve(__dirname, '../../test-config-dir')
     }
 
-    return path.join(os.homedir(), '.project-registry')
+    return path.join(os.homedir(), '.xcute')
 }
 
-const getConfigFile = () => path.join(getConfigDir(), 'config.json')
+export const getConfigFile = () => path.join(getConfigDir(), 'config.json')
 
 
 
@@ -85,18 +85,18 @@ export function saveConfig(config: ConfigData): void {
     fs.writeFileSync(getConfigFile(), JSON.stringify(config, null, 2), 'utf8')
 }
 
-export function getTemplate(name: string): Template | undefined {
+export function getAction(name: string): Action | undefined {
     const config = loadConfig()
     return config[name]
 }
 
-export function setTemplate(name: string, template: Template): void {
+export function setAction(name: string, action: Action): void {
     const config = loadConfig()
-    config[name] = template
+    config[name] = action
     saveConfig(config)
 }
 
-export function deleteTemplate(name: string): boolean {
+export function deleteAction(name: string): boolean {
     const config = loadConfig()
     if (config[name]) {
         delete config[name]
@@ -107,12 +107,12 @@ export function deleteTemplate(name: string): boolean {
     return false
 }
 
-export function templateExists(name: string): boolean {
+export function actionExists(name: string): boolean {
     const config = loadConfig()
     return name in config
 }
 
-export function getAllTemplates(filter?: string): ConfigData {
+export function getAllActions(filter?: string): ConfigData {
     const config = loadConfig()
     if (!filter) return config
     return Object.fromEntries(Object.entries(config).filter(([name]) => name.toLowerCase().includes(filter.toLowerCase())))

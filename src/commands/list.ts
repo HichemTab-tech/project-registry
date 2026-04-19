@@ -4,11 +4,11 @@ import Table from 'cli-table3'
 import stripAnsi from 'strip-ansi'
 
 import {BaseCommand} from "../BaseCommand.js";
-import {getAllTemplates} from '../utils/config.js'
+import {getAllActions} from '../utils/config.js'
 import {truncate} from "../utils/dry.js";
 
 class List extends BaseCommand {
-    static description = 'List all registered templates'
+    static description = 'List all registered actions'
 
     static examples = [
         '<%= config.bin %> <%= command.id %>',
@@ -17,16 +17,16 @@ class List extends BaseCommand {
 
     static flags = {
         table: Flags.boolean({allowNo: true, char: 't', default: true, description: 'Show output in table format'}),
-        "with-content": Flags.boolean({char: 'c', description: 'With template content'})
+        "with-content": Flags.boolean({char: 'c', description: 'With action content'})
     }
 
     async run(): Promise<void> {
         const {flags} = await this.parse(List)
-        const templates = getAllTemplates()
-        const names = Object.keys(templates)
+        const actions = getAllActions()
+        const names = Object.keys(actions)
 
         if (names.length === 0) {
-            this.log('No templates registered')
+            this.log('No actions registered')
             return
         }
 
@@ -36,11 +36,11 @@ class List extends BaseCommand {
             const table = new Table({head: headers})
 
             for (const name of names) {
-                const template = templates[name]
-                const desc = template.description ? truncate(template.description) : 'No description'
+                const action = actions[name]
+                const desc = action.description ? truncate(action.description) : 'No description'
                 let row;
                 if (flags['with-content']) {
-                    const rawCommands = template.commands ? template.commands.join(' && ') : ''
+                    const rawCommands = action.commands ? action.commands.join(' && ') : ''
                     const truncated = truncate(stripAnsi(rawCommands))
                     const coloredCommands = truncated.split(' && ').join(chalk.cyan(' && '))
                     row = [chalk.green(name), desc, coloredCommands]
@@ -57,17 +57,17 @@ class List extends BaseCommand {
         }
 
         for (const name of names) {
-            const template = templates[name]
+            const action = actions[name]
             let result = chalk.green(name)
-            if (template.description) {
-                const desc = truncate(template.description)
+            if (action.description) {
+                const desc = truncate(action.description)
                 result += ` ${chalk.yellow('-')} ${desc}`
             } else {
                 result += ` ${chalk.yellow('-')} ${chalk.grey('No description')}`
             }
 
-            if (template.commands && flags['with-content']) {
-                const rawCommands = template.commands ? template.commands.join(' && ') : ''
+            if (action.commands && flags['with-content']) {
+                const rawCommands = action.commands ? action.commands.join(' && ') : ''
                 const truncated = truncate(stripAnsi(rawCommands))
                 const coloredCommands = truncated.split(' && ').join(chalk.cyan(' && '))
                 result += ` ${chalk.yellow('-')} ${coloredCommands}`

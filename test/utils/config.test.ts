@@ -4,12 +4,12 @@ import * as os from 'node:os'
 import * as path from 'node:path'
 
 import {
-    deleteTemplate,
-    getAllTemplates,
-    getTemplate,
+    deleteAction,
+    getAllActions,
+    getAction,
     setConfigDir,
-    setTemplate,
-    templateExists,
+    setAction,
+    actionExists,
 } from '../../src/utils/config.js'
 
 describe('config utilities', () => {
@@ -24,30 +24,30 @@ describe('config utilities', () => {
         fs.rmSync(testDir, {force: true, recursive: true})
     })
 
-    it('saves, loads and deletes a template', () => {
+    it('saves, loads and deletes an action', () => {
         const tpl = {commands: ['echo hi'], description: 'desc'}
-        setTemplate('my-tpl', tpl)
+        setAction('my-tpl', tpl)
 
-        expect(templateExists('my-tpl')).to.equal(true)
+        expect(actionExists('my-tpl')).to.equal(true)
 
-        const loaded = getTemplate('my-tpl')
+        const loaded = getAction('my-tpl')
         expect(loaded).to.not.be.undefined
         expect(loaded!.commands).to.deep.equal(['echo hi'])
         expect(loaded!.description).to.equal('desc')
 
-        const deleted = deleteTemplate('my-tpl')
+        const deleted = deleteAction('my-tpl')
         expect(deleted).to.equal(true)
-        expect(templateExists('my-tpl')).to.equal(false)
+        expect(actionExists('my-tpl')).to.equal(false)
     })
 
-    it('returns filtered templates with getAllTemplates', () => {
-        setTemplate('selected', {commands: ['echo a']})
-        setTemplate('other', {commands: ['echo b']})
+    it('returns filtered actions with getAllActions', () => {
+        setAction('selected', {commands: ['echo a']})
+        setAction('other', {commands: ['echo b']})
 
-        const all = getAllTemplates()
+        const all = getAllActions()
         expect(Object.keys(all)).to.include.members(['selected', 'other'])
 
-        const filtered = getAllTemplates('sel')
+        const filtered = getAllActions('sel')
         expect(Object.keys(filtered)).to.deep.equal(['selected'])
     })
 })

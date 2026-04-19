@@ -18,8 +18,8 @@ describe('remove', () => {
         fs.rmSync(testDir, {force: true, recursive: true})
     })
 
-    it('removes a template with --yes flag', async () => {
-        // Setup - add a template first
+    it('removes an action with --yes flag', async () => {
+        // Setup - add an action first
         const configPath = path.join(testDir, 'config.json')
         const configData = {
             'keep-me': {
@@ -34,14 +34,14 @@ describe('remove', () => {
         fs.writeFileSync(configPath, JSON.stringify(configData))
 
         const {stdout} = await runCommand(['remove', 'to-remove', '--yes'])
-        expect(stdout).to.contain('Template "to-remove" removed')
+        expect(stdout).to.contain('Action "to-remove" removed')
 
         const content = JSON.parse(fs.readFileSync(configPath, 'utf8'))
         expect(content['to-remove']).to.not.exist
         expect(content['keep-me']).to.exist
     })
 
-    it('errors if template does not exist', async () => {
+    it('errors if action does not exist', async () => {
         try {
             await runCommand(['remove', 'non-existent', '--yes'])
         } catch (error) {

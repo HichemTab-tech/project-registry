@@ -1,24 +1,15 @@
-# project-registry – `projx`
+# xcute
 
-A CLI tool to save and run command templates with variables.
+A CLI to save, reuse, and execute command actions.
 
-[![Version](https://img.shields.io/npm/v/project-registry.svg)](https://npmjs.org/package/project-registry)
-[![Downloads/week](https://img.shields.io/npm/dw/project-registry.svg)](https://npmjs.org/package/project-registry)
-[![License](https://img.shields.io/npm/l/project-registry.svg)](https://github.com/HichemTab-tech/project-registry/blob/master/LICENSE)
+> _Previously known as **project-registry**_
+
+[![Version](https://img.shields.io/npm/v/xcute.svg)](https://npmjs.org/package/xcute)
+[![Downloads/week](https://img.shields.io/npm/dw/xcute.svg)](https://npmjs.org/package/xcute)
+[![License](https://img.shields.io/npm/l/xcute.svg)](https://github.com/HichemTab-tech/xcute/blob/master/LICENSE)
 
 
-![project-registry banner](assets/banner.png)
-
-# ⚠️ Deprecated
-
-This project has been renamed to **xcute**.
-
-👉 Install the new package:
-```bash
-npm i -g xcute-cli
-```
-
-For migration guide check https://github.com/HichemTab-tech/xcute/blob/0.7.0/MIGRATION.md
+![xcute banner](assets/banner.png)
 
 ## Installation
 
@@ -26,30 +17,30 @@ For migration guide check https://github.com/HichemTab-tech/xcute/blob/0.7.0/MIG
 - Node.js version **21.0.0** or higher.
 
 ```bash
-npm install -g project-registry
+npm install -g xcute-cli
 ```
 
 or
 
 ```bash
-pnpm add -g project-registry
+pnpm add -g xcute-cli
 ```
 
 
 ## Quick Start
 
-### 1. Add a simple template
+### 1. Add a simple action
 
-A template is just **a name mapped to one or more commands**.
+An action is just **a name mapped to one or more commands**.
 
 ```bash
-projx add react "pnpm create vite . --template react"
+xcute add react "pnpm create vite . --action react"
 ```
 
 ### 2. Run it
 
 ```bash
-projx react
+xcute react
 ```
 
 That’s it ^.^
@@ -57,13 +48,13 @@ That’s it ^.^
 
 ## Using variables
 
-Templates can contain variables using the `{{variable}}` syntax.
+Actions can contain variables using the `{{variable}}` syntax.
 
 Example:
 
 ```bash
-projx add react \
-  "pnpm create vite {{name}} --template react" \
+xcute add react \
+  "pnpm create vite {{name}} --action react" \
   "cd {{name}}" \
   "pnpm install"
 ```
@@ -73,13 +64,13 @@ projx add react \
 You can provide a description for a variable to make the prompt more helpful using `{{variable::description}}` syntax:
 
 ```bash
-projx add my-template "echo {{name::Enter the project name}}"
+xcute add my-action "echo {{name::Enter the project name}}"
 ```
 
 If you use the same variable multiple times, you only need to add the description once:
 
 ```bash
-projx add my-template \
+xcute add my-action \
   "echo Creating {{name::Project Name}}" \
   "mkdir {{name}}" \
   "cd {{name}}"
@@ -90,13 +81,13 @@ projx add my-template \
 You can provide a default value using `{{variable|default}}` syntax:
 
 ```bash
-projx add my-template "code {{path|.}}"
+xcute add my-action "code {{path|.}}"
 ```
 
 You can combine description and default value with `{{variable::description|default}}`:
 
 ```bash
-projx add my-template "echo {{name::Project Name|my-app}}"
+xcute add my-action "echo {{name::Project Name|my-app}}"
 ```
 
 Resolution order is:
@@ -108,19 +99,19 @@ Resolution order is:
 Run it by passing values:
 
 ```bash
-projx react my-app
+xcute react my-app
 ```
 
-If a value is missing, `projx` will **ask for it automatically**.
+If a value is missing, `xcute` will **ask for it automatically**.
 
 Variables are optional — if you don’t need them, don’t use them.
 
-## Running templates (name or select)
+## Running actions (name or select)
 
 ### Run directly by name
 
 ```bash
-projx react my-app
+xcute react my-app
 ```
 
 This is the fastest way if you remember the name.
@@ -130,17 +121,17 @@ This is the fastest way if you remember the name.
 If you don’t remember the exact name:
 
 ```bash
-projx select # or projx s
+xcute select # or xcute s
 ```
 
 You’ll get a numbered list and can pick one.
 
-#### Filtering templates
+#### Filtering actions
 
-You can filter the list when you have many templates:
+You can filter the list when you have many actions:
 
 ```bash
-projx select -f rea
+xcute select -f rea
 ```
 
 Example:
@@ -151,117 +142,185 @@ Example:
 
 This makes `select` the **default workflow** for many users.
 
+## Tip: shorten `xcute` to `x`
+
+If you use `xcute` a lot, adding a shell alias can make common flows faster.
+
+Example:
+
+```bash
+x add react "pnpm create vite . --action react"
+x react
+x select
+```
+
+### Linux / macOS
+
+For `bash` or `zsh`, add this to your shell config:
+
+```bash
+alias x='xcute'
+```
+
+Common locations:
+
+- `~/.bashrc`
+- `~/.zshrc`
+
+After saving, reload your shell:
+
+```bash
+source ~/.bashrc
+# or
+source ~/.zshrc
+```
+
+### Windows
+
+For PowerShell, add this function to your PowerShell profile:
+
+```powershell
+function x { xcute $args }
+```
+
+If your profile does not exist yet, create it first:
+
+```powershell
+New-Item -ItemType File -Path $PROFILE -Force
+```
+
+Then open it:
+
+```powershell
+notepad $PROFILE
+```
+
+Save the function, then reload your profile:
+
+```powershell
+. $PROFILE
+```
+
+This gives you a short `x` command in every new PowerShell session.
+
+For Command Prompt (`cmd.exe`), you can create a shortcut for the current session with:
+
+```bat
+doskey x=xcute $*
+```
+
+
 ## Commands
 
-### `projx add <name> <commands...>`
+### `xcute add <name> <commands...>`
 
-Register a new template with one or more commands.
+Register a new action with one or more commands.
 
 ```bash
 # Basic usage
-projx add <name> "command1" "command2" "command3"
+xcute add <name> "command1" "command2" "command3"
 
 # With description
-projx add <name> -d "My template description" "command1" "command2"
+xcute add <name> -d "My action description" "command1" "command2"
 
 # Interactive mode
-projx add
+xcute add
 ```
 
 Variables use `{{variable}}` syntax and are resolved at run time.
 
-### `projx run <name> [values...]`
+### `xcute run <name> [values...]`
 
-Run a registered template.
+Run a registered action.
 
-On Unix-like systems, templates are executed through your current shell from `$SHELL` in interactive mode when available, so aliases and shell functions from your normal CLI are available there too.
+On Unix-like systems, actions are executed through your current shell from `$SHELL` in interactive mode when available, so aliases and shell functions from your normal CLI are available there too.
 
 ```bash
 # Pass variable values as arguments
-projx run react my-app
+xcute run react my-app
 
 # Force interactive mode
-projx run react -i
+xcute run react -i
 ```
 
-### `projx <name> [values...]`
+### `xcute <name> [values...]`
 
-Shortcut for `projx run`.
+Shortcut for `xcute run`.
 
 ```bash
-projx react my-app
+xcute react my-app
 ```
 
-### `projx list`
+### `xcute list`
 
-List all registered templates.
+List all registered actions.
 
 ```bash
 # Table format (default)
-projx list
-projx list -c        # show commands
-projx list --no-table
+xcute list
+xcute list -c        # show commands
+xcute list --no-table
 ```
 
-### `projx select`
+### `xcute select`
 
-Interactively select and run a template.
+Interactively select and run a action.
 
 ```bash
-projx select
-projx select -f react   # filter by name
+xcute select
+xcute select -f react   # filter by name
 ```
 
-### `projx remove <name>`
+### `xcute remove <name>`
 
-Remove a template.
+Remove a action.
 
 ```bash
-projx remove react
-projx remove -s      # interactive selection
-projx remove -y      # skip confirmation
+xcute remove react
+xcute remove -s      # interactive selection
+xcute remove -y      # skip confirmation
 ```
 
-### `projx export <path>`
+### `xcute export <path>`
 
-Export your template registry to a JSON file (backup).
+Export your action registry to a JSON file (backup).
 
 ```bash
 # Export to a file
-projx export backup.json
+xcute export backup.json
 
-# Export to a directory (creates project-registry.json)
-projx export ./backups/
+# Export to a directory (creates xcute.json)
+xcute export ./backups/
 ```
 
-### `projx import <path>|<url>`
+### `xcute import <path>|<url>`
 
-Import templates from a JSON file or URL.
+Import action from a JSON file or URL.
 
 ```bash
 # Import from local file (merges with existing)
-projx import backup.json
+xcute import backup.json
 
 # Import from URL
-projx import https://example.com/shared-templates.json
+xcute import https://example.com/shared-actions.json
 
-# Import from file and replace ALL existing templates
-projx import backup.json --replace
+# Import from file and replace ALL existing actions
+xcute import backup.json --replace
 ```
 
-### `projx self-update [package-manager]`
+### `xcute self-update [package-manager]`
 
 Update the CLI to the latest version.
 
 ```bash
 # Update using pnpm (default)
-projx self-update
+xcute self-update
 
 # Update using npm
-projx self-update npm
+xcute self-update npm
 
 # Update using yarn
-projx self-update yarn
+xcute self-update yarn
 ```
 
 ## Examples
@@ -270,51 +329,39 @@ projx self-update yarn
 
 ```bash
 # React + Vite
-projx add react \
-  "pnpm create vite {{name}} --template react-ts" \
+xcute add react \
+  "pnpm create vite {{name}} --action react-ts" \
   "cd {{name}}" \
   "pnpm install" \
   "code ."
 
 # Next.js
-projx add next "pnpm create next-app {{name}}" "cd {{name}}" "code ."
+xcute add next "pnpm create next-app {{name}}" "cd {{name}}" "code ."
 
 # Express API
-projx add express "mkdir {{name}}" "cd {{name}}" "pnpm init -y" "pnpm add express" "code ."
+xcute add express "mkdir {{name}}" "cd {{name}}" "pnpm init -y" "pnpm add express" "code ."
 ```
 
 ### Dev shortcuts
 
 ```bash
 # Git quick commit
-projx add gc "git add ." "git commit -m '{{message}}'" "git push"
+xcute add gc "git add ." "git commit -m '{{message}}'" "git push"
 
 # Docker compose
-projx add dcu "docker compose up -d"
-projx add dcd "docker compose down"
+xcute add dcu "docker compose up -d"
+xcute add dcd "docker compose down"
 
 # SSH to server
-projx add ssh-prod "ssh {{user}}@production-server.com"
+xcute add ssh-prod "ssh {{user}}@production-server.com"
 ```
-
-## Not just for projects
-
-`projx` works for **any repeatable command sequence**:
-
-* Git workflows
-* Docker commands
-* SSH shortcuts
-* Build & deploy scripts
-* System utilities
-
-It’s a **command template registry**, not just a project generator.
 
 ## Config location
 
-Templates are stored at:
+Actions are stored at:
 
 ```
-~/.project-registry/config.json
+~/.xcute/config.json
 ```
 
 ---
@@ -325,7 +372,7 @@ Contributions are welcome! Please follow the standard fork-and-pull-request work
 
 ## Issues
 
-If you encounter any issue, please open an issue [here](https://github.com/HichemTab-tech/project-registry/issues).
+If you encounter any issue, please open an issue [here](https://github.com/HichemTab-tech/xcute/issues).
 
 ## License
 

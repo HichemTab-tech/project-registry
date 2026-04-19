@@ -11,7 +11,7 @@ class Import extends BaseCommand {
         path: Args.string({description: 'Path to import file', required: true}),
     }
 
-    static description = 'Import templates from a JSON file'
+    static description = 'Import actions from a JSON file'
 
     static examples = [
         '<%= config.bin %> <%= command.id %> ./backup.json',
@@ -110,18 +110,18 @@ class Import extends BaseCommand {
             let addedCount = 0
             let updatedCount = 0
 
-            for (const [name, template] of Object.entries(validImportData)) {
+            for (const [name, action] of Object.entries(validImportData)) {
                 if (currentConfig[name]) {
                     const overwrite = await prompts.confirm({
                         default: false,
-                        message: `Template "${name}" already exists. Overwrite?`,
+                        message: `Action "${name}" already exists. Overwrite?`,
                     })
                     if (overwrite) {
-                        currentConfig[name] = template
+                        currentConfig[name] = action
                         updatedCount++
                     }
                 } else {
-                    currentConfig[name] = template
+                    currentConfig[name] = action
                     addedCount++
                 }
             }

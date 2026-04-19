@@ -20,7 +20,7 @@ describe('import', () => {
     // Create a dummy import file
     importFile = path.join(testDir, 'import.json')
     fs.writeFileSync(importFile, JSON.stringify({
-      'imported-template': {
+      'imported-action': {
         commands: ['echo imported'],
       },
     }))
@@ -37,7 +37,7 @@ describe('import', () => {
       status: 200,
       statusText: 'OK',
       text: async () => JSON.stringify({
-        'url-template': {
+        'url-action': {
           commands: ['echo url'],
         },
       }),
@@ -62,13 +62,13 @@ describe('import', () => {
 
     const config = loadConfig()
     expect(config.existing).to.exist
-    expect(config['imported-template']).to.exist
-    expect(config['imported-template'].commands).to.deep.equal(['echo imported'])
+    expect(config['imported-action']).to.exist
+    expect(config['imported-action'].commands).to.deep.equal(['echo imported'])
   })
 
   it('imports from file (replace mode)', async () => {
     saveConfig({
-      'old-template': {commands: ['echo old']},
+      'old-action': {commands: ['echo old']},
     })
 
     const {stdout} = await runCommand(['import', importFile, '--replace'])
@@ -76,16 +76,16 @@ describe('import', () => {
     expect(stdout).to.contain('Registry replaced successfully')
 
     const config = loadConfig()
-    expect(config['old-template']).to.not.exist
-    expect(config['imported-template']).to.exist
+    expect(config['old-action']).to.not.exist
+    expect(config['imported-action']).to.exist
   })
 
   it('imports from URL', async () => {
-    await runCommand(['import', 'https://example.com/templates.json'])
+    await runCommand(['import', 'https://example.com/actions.json'])
 
     const config = loadConfig()
-    expect(config['url-template']).to.exist
-    expect(config['url-template'].commands).to.deep.equal(['echo url'])
+    expect(config['url-action']).to.exist
+    expect(config['url-action'].commands).to.deep.equal(['echo url'])
   })
 
   it('fails on invalid JSON file', async () => {

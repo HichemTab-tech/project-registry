@@ -11,7 +11,7 @@ class Export extends BaseCommand {
         path: Args.string({description: 'Path to export file', required: true}),
     }
 
-    static description = 'Export the template registry to a JSON file'
+    static description = 'Export the action registry to a JSON file'
 
     static examples = [
         '<%= config.bin %> <%= command.id %> ./backup.json',
@@ -27,7 +27,7 @@ class Export extends BaseCommand {
         try {
             const stats = fs.statSync(targetPath)
             if (stats.isDirectory()) {
-                targetPath = path.join(targetPath, 'project-registry.json')
+                targetPath = path.join(targetPath, 'xcute.json')
             }
         } catch (error: unknown) {
             // If file/dir doesn't exist, we treat it as the target file path

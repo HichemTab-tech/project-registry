@@ -11,7 +11,7 @@ class SelfUpdate extends BaseCommand {
         }),
     }
 
-    static description = 'Self update the projx CLI'
+    static description = 'Self update the xcute CLI'
 
     static examples = ['<%= config.bin %> <%= command.id %>']
 
@@ -30,17 +30,17 @@ class SelfUpdate extends BaseCommand {
         let command: string|undefined;
         switch (packageManager) {
             case 'npm': {
-                command = 'npm install -g project-registry@latest';
+                command = 'npm install -g xcute-cli@latest';
                 break;
             }
 
             case 'pnpm': {
-                command = 'pnpm add project-registry@latest -g';
+                command = 'pnpm add xcute-cli@latest -g';
                 break;
             }
 
             case 'yarn': {
-                command = 'yarn global add project-registry@latest';
+                command = 'yarn global add xcute-cli@latest';
                 break;
             }
         }
@@ -55,10 +55,10 @@ class SelfUpdate extends BaseCommand {
             this.log(stdout.toString());
         } catch (error) {
             if (error instanceof Error) {
-                this.error(`Failed to update project-registry: ${error.message}`);
+                this.error(`Failed to update xcute: ${error.message}`);
             }
 
-            this.error(`Failed to update project-registry.`)
+            this.error(`Failed to update xcute.`)
         }
 
         this.log('Update complete. Please restart your terminal session if necessary.')

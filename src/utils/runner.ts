@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import {execa, execaCommand, ExecaError} from 'execa'
 
-import {Template} from './config.js'
+import {Action} from './config.js'
 import {prompts} from "./prompts.js";
 import {extractVariables, replaceAllVariables, VariableDefinition} from './variables.js'
 
@@ -62,11 +62,11 @@ export function resolveVariableValue(variable: VariableDefinition, providedValue
     }
 }
 
-export async function runTemplate(template: Template, options: RunOptions): Promise<boolean> {
+export async function runAction(action: Action, options: RunOptions): Promise<boolean> {
     const {interactive = false, log, logError, providedValues = []} = options
 
     // Extract variables from commands
-    const variables = extractVariables(template.commands)
+    const variables = extractVariables(action.commands)
 
     // Build values map
     const values: Record<string, {
@@ -93,7 +93,7 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
     }
 
     // Replace variables in all commands
-    const resolvedCommands = replaceAllVariables(template.commands, values)
+    const resolvedCommands = replaceAllVariables(action.commands, values)
 
     const combinedCommand = resolvedCommands.join(' && ')
     log(`$ ${combinedCommand}`)

@@ -4,28 +4,28 @@ import {createShellExecutionPlan, resolveVariableValue} from '../../src/utils/ru
 
 describe('runner', () => {
     it('uses the interactive user shell on unix-like systems', () => {
-        const executionPlan = createShellExecutionPlan('projx hello', 'linux', '/bin/zsh')
+        const executionPlan = createShellExecutionPlan('xcute hello', 'linux', '/bin/zsh')
 
         expect(executionPlan).to.deep.equal({
             command: '/bin/zsh',
-            args: ['-i', '-c', 'projx hello'],
+            args: ['-i', '-c', 'xcute hello'],
         })
     })
 
     it('falls back to the default shell when no user shell is available', () => {
-        const executionPlan = createShellExecutionPlan('projx hello', 'linux', '')
+        const executionPlan = createShellExecutionPlan('xcute hello', 'linux', '')
 
         expect(executionPlan).to.deep.equal({
-            command: 'projx hello',
+            command: 'xcute hello',
             shell: true,
         })
     })
 
     it('keeps the default shell execution on windows', () => {
-        const executionPlan = createShellExecutionPlan('projx hello', 'win32', '/bin/zsh')
+        const executionPlan = createShellExecutionPlan('xcute hello', 'win32', '/bin/zsh')
 
         expect(executionPlan).to.deep.equal({
-            command: 'projx hello',
+            command: 'xcute hello',
             shell: true,
         })
     })

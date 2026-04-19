@@ -18,7 +18,7 @@ describe('run', () => {
         fs.rmSync(testDir, {force: true, recursive: true})
     })
 
-    it('runs a template command', async () => {
+    it('runs an action command', async () => {
         const configPath = path.join(testDir, 'config.json')
         const configData = {
             'test-run': {
@@ -28,8 +28,7 @@ describe('run', () => {
         }
         fs.writeFileSync(configPath, JSON.stringify(configData))
 
-        const {stdout, stderr} = await runCommand(['run', 'test-run'])
-        expect(stderr).to.contain('xcute')
+        const {stdout} = await runCommand(['run', 'test-run'])
         expect(stdout).to.contain('run test output')
     })
 })

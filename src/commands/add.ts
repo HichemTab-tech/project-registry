@@ -2,15 +2,15 @@ import {Args, Flags} from '@oclif/core'
 import chalk from "chalk";
 
 import {BaseCommand} from "../BaseCommand.js";
-import {setTemplate, templateExists} from '../utils/config.js'
+import {actionExists, setAction} from '../utils/config.js'
 import {prompts} from "../utils/prompts.js";
 
 class Add extends BaseCommand {
     static args = {
-        name: Args.string({description: 'Template name', required: false}),
+        name: Args.string({description: 'Action name', required: false}),
     }
 
-    static description = 'Register a new project template'
+    static description = 'Register a new project action'
 
     static examples = [
         '<%= config.bin %> <%= command.id %> react "pnpm dlx create-vite {{name}}" "cd {{name}}" "pnpm install"',
@@ -18,7 +18,7 @@ class Add extends BaseCommand {
     ]
 
     static flags = {
-        description: Flags.string({char: 'd', description: 'Template description'}),
+        description: Flags.string({char: 'd', description: 'Action description'}),
     }
 
     static strict = false // Allow variable number of arguments
@@ -28,23 +28,23 @@ class Add extends BaseCommand {
 
         let {description} = flags
 
-        const templateName = args.name ?? await prompts.input({message: 'Template name:'})
+        const actionName = args.name ?? await prompts.input({message: 'Action name:'})
 
-        if (!templateName.trim()) {
-            this.error('Template name is required')
+        if (!actionName.trim()) {
+            this.error('Action name is required')
         }
 
         const reservedCommands = Object.values(this.config.commands).map(c => c.id);
 
-        if (reservedCommands.includes(templateName)) {
-            this.warn(`The template name "${templateName}" is reserved. To use it in future, you should use the "run" command like ${chalk.yellow(`projx run ${templateName}`)}, instead of ${chalk.yellow(`projx ${templateName}`)}.`)
+        if (reservedCommands.includes(actionName)) {
+            this.warn(`The action name "${actionName}" is reserved. To use it in future, you should use the "run" command like ${chalk.yellow(`xcute run ${actionName}`)}, instead of ${chalk.yellow(`xcute ${actionName}`)}.`)
         }
 
         this.log('Enter commands (one per line, empty line to finish):')
 
         // Get commands from remaining arguments (argv includes all args including the name)
         const allArgs = argv as string[]
-        const commands = allArgs.slice(1) // Skip the template name
+        const commands = allArgs.slice(1) // Skip the action name
 
         if (commands.length === 0) {
             while (true) {
@@ -65,11 +65,11 @@ class Add extends BaseCommand {
             description = await prompts.input({message: 'Description (optional):'})
         }
 
-        // Check if the template already exists
-        if (templateExists(templateName)) {
+        // Check if the action already exists
+        if (actionExists(actionName)) {
             const overwrite = await prompts.confirm({
                 default: false,
-                message: `Template "${templateName}" already exists. Overwrite?`,
+                message: `Action "${actionName}" already exists. Overwrite?`,
             })
 
             if (!overwrite) {
@@ -78,13 +78,13 @@ class Add extends BaseCommand {
             }
         }
 
-        // Save the template
-        setTemplate(templateName, {
+        // Save the action
+        setAction(actionName, {
             commands,
             ...(description && {description}),
         })
 
-        this.log(`Template "${templateName}" added with ${commands.length} command(s)`)
+        this.log(`Action "${actionName}" added with ${commands.length} command(s)`)
     }
 }
 

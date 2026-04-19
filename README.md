@@ -74,6 +74,26 @@ projx add my-template \
   "cd {{name}}"
 ```
 
+### Variables with default values
+
+You can provide a default value using `{{variable|default}}` syntax:
+
+```bash
+projx add my-template "code {{path|.}}"
+```
+
+You can combine description and default value with `{{variable::description|default}}`:
+
+```bash
+projx add my-template "echo {{name::Project Name|my-app}}"
+```
+
+Resolution order is:
+
+1. Passed CLI value
+2. Variable default value
+3. Interactive prompt
+
 Run it by passing values:
 
 ```bash

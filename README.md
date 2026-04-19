@@ -1,4 +1,4 @@
-# xcute – `projx`
+# xcute
 
 A CLI tool to save and run command templates with variables.
 
@@ -32,13 +32,13 @@ pnpm add -g xcute
 A template is just **a name mapped to one or more commands**.
 
 ```bash
-projx add react "pnpm create vite . --template react"
+xcute add react "pnpm create vite . --template react"
 ```
 
 ### 2. Run it
 
 ```bash
-projx react
+xcute react
 ```
 
 That’s it ^.^
@@ -51,7 +51,7 @@ Templates can contain variables using the `{{variable}}` syntax.
 Example:
 
 ```bash
-projx add react \
+xcute add react \
   "pnpm create vite {{name}} --template react" \
   "cd {{name}}" \
   "pnpm install"
@@ -62,13 +62,13 @@ projx add react \
 You can provide a description for a variable to make the prompt more helpful using `{{variable::description}}` syntax:
 
 ```bash
-projx add my-template "echo {{name::Enter the project name}}"
+xcute add my-template "echo {{name::Enter the project name}}"
 ```
 
 If you use the same variable multiple times, you only need to add the description once:
 
 ```bash
-projx add my-template \
+xcute add my-template \
   "echo Creating {{name::Project Name}}" \
   "mkdir {{name}}" \
   "cd {{name}}"
@@ -79,13 +79,13 @@ projx add my-template \
 You can provide a default value using `{{variable|default}}` syntax:
 
 ```bash
-projx add my-template "code {{path|.}}"
+xcute add my-template "code {{path|.}}"
 ```
 
 You can combine description and default value with `{{variable::description|default}}`:
 
 ```bash
-projx add my-template "echo {{name::Project Name|my-app}}"
+xcute add my-template "echo {{name::Project Name|my-app}}"
 ```
 
 Resolution order is:
@@ -97,10 +97,10 @@ Resolution order is:
 Run it by passing values:
 
 ```bash
-projx react my-app
+xcute react my-app
 ```
 
-If a value is missing, `projx` will **ask for it automatically**.
+If a value is missing, `xcute` will **ask for it automatically**.
 
 Variables are optional — if you don’t need them, don’t use them.
 
@@ -109,7 +109,7 @@ Variables are optional — if you don’t need them, don’t use them.
 ### Run directly by name
 
 ```bash
-projx react my-app
+xcute react my-app
 ```
 
 This is the fastest way if you remember the name.
@@ -119,7 +119,7 @@ This is the fastest way if you remember the name.
 If you don’t remember the exact name:
 
 ```bash
-projx select # or projx s
+xcute select # or xcute s
 ```
 
 You’ll get a numbered list and can pick one.
@@ -129,7 +129,7 @@ You’ll get a numbered list and can pick one.
 You can filter the list when you have many templates:
 
 ```bash
-projx select -f rea
+xcute select -f rea
 ```
 
 Example:
@@ -142,24 +142,24 @@ This makes `select` the **default workflow** for many users.
 
 ## Commands
 
-### `projx add <name> <commands...>`
+### `xcute add <name> <commands...>`
 
 Register a new template with one or more commands.
 
 ```bash
 # Basic usage
-projx add <name> "command1" "command2" "command3"
+xcute add <name> "command1" "command2" "command3"
 
 # With description
-projx add <name> -d "My template description" "command1" "command2"
+xcute add <name> -d "My template description" "command1" "command2"
 
 # Interactive mode
-projx add
+xcute add
 ```
 
 Variables use `{{variable}}` syntax and are resolved at run time.
 
-### `projx run <name> [values...]`
+### `xcute run <name> [values...]`
 
 Run a registered template.
 
@@ -167,90 +167,90 @@ On Unix-like systems, templates are executed through your current shell from `$S
 
 ```bash
 # Pass variable values as arguments
-projx run react my-app
+xcute run react my-app
 
 # Force interactive mode
-projx run react -i
+xcute run react -i
 ```
 
-### `projx <name> [values...]`
+### `xcute <name> [values...]`
 
-Shortcut for `projx run`.
+Shortcut for `xcute run`.
 
 ```bash
-projx react my-app
+xcute react my-app
 ```
 
-### `projx list`
+### `xcute list`
 
 List all registered templates.
 
 ```bash
 # Table format (default)
-projx list
-projx list -c        # show commands
-projx list --no-table
+xcute list
+xcute list -c        # show commands
+xcute list --no-table
 ```
 
-### `projx select`
+### `xcute select`
 
 Interactively select and run a template.
 
 ```bash
-projx select
-projx select -f react   # filter by name
+xcute select
+xcute select -f react   # filter by name
 ```
 
-### `projx remove <name>`
+### `xcute remove <name>`
 
 Remove a template.
 
 ```bash
-projx remove react
-projx remove -s      # interactive selection
-projx remove -y      # skip confirmation
+xcute remove react
+xcute remove -s      # interactive selection
+xcute remove -y      # skip confirmation
 ```
 
-### `projx export <path>`
+### `xcute export <path>`
 
 Export your template registry to a JSON file (backup).
 
 ```bash
 # Export to a file
-projx export backup.json
+xcute export backup.json
 
 # Export to a directory (creates xcute.json)
-projx export ./backups/
+xcute export ./backups/
 ```
 
-### `projx import <path>|<url>`
+### `xcute import <path>|<url>`
 
 Import templates from a JSON file or URL.
 
 ```bash
 # Import from local file (merges with existing)
-projx import backup.json
+xcute import backup.json
 
 # Import from URL
-projx import https://example.com/shared-templates.json
+xcute import https://example.com/shared-templates.json
 
 # Import from file and replace ALL existing templates
-projx import backup.json --replace
+xcute import backup.json --replace
 ```
 
-### `projx self-update [package-manager]`
+### `xcute self-update [package-manager]`
 
 Update the CLI to the latest version.
 
 ```bash
 # Update using pnpm (default)
-projx self-update
+xcute self-update
 
 # Update using npm
-projx self-update npm
+xcute self-update npm
 
 # Update using yarn
-projx self-update yarn
+xcute self-update yarn
 ```
 
 ## Examples
@@ -259,36 +259,36 @@ projx self-update yarn
 
 ```bash
 # React + Vite
-projx add react \
+xcute add react \
   "pnpm create vite {{name}} --template react-ts" \
   "cd {{name}}" \
   "pnpm install" \
   "code ."
 
 # Next.js
-projx add next "pnpm create next-app {{name}}" "cd {{name}}" "code ."
+xcute add next "pnpm create next-app {{name}}" "cd {{name}}" "code ."
 
 # Express API
-projx add express "mkdir {{name}}" "cd {{name}}" "pnpm init -y" "pnpm add express" "code ."
+xcute add express "mkdir {{name}}" "cd {{name}}" "pnpm init -y" "pnpm add express" "code ."
 ```
 
 ### Dev shortcuts
 
 ```bash
 # Git quick commit
-projx add gc "git add ." "git commit -m '{{message}}'" "git push"
+xcute add gc "git add ." "git commit -m '{{message}}'" "git push"
 
 # Docker compose
-projx add dcu "docker compose up -d"
-projx add dcd "docker compose down"
+xcute add dcu "docker compose up -d"
+xcute add dcd "docker compose down"
 
 # SSH to server
-projx add ssh-prod "ssh {{user}}@production-server.com"
+xcute add ssh-prod "ssh {{user}}@production-server.com"
 ```
 
 ## Not just for projects
 
-`projx` works for **any repeatable command sequence**:
+`xcute` works for **any repeatable command sequence**:
 
 * Git workflows
 * Docker commands

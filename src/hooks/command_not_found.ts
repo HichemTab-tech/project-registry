@@ -7,7 +7,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     const {id} = opts
 
     // The id is the command that was not found
-    // oclif joins command parts with ':', e.g., "react:my-app" for "projx react my-app"
+    // oclif joins command parts with ':', e.g., "react:my-app" for "xcute react my-app"
     // We need to extract the template name (first part)
     if (!id) {
         return

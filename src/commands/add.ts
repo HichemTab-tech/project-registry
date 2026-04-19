@@ -37,7 +37,7 @@ class Add extends BaseCommand {
         const reservedCommands = Object.values(this.config.commands).map(c => c.id);
 
         if (reservedCommands.includes(templateName)) {
-            this.warn(`The template name "${templateName}" is reserved. To use it in future, you should use the "run" command like ${chalk.yellow(`projx run ${templateName}`)}, instead of ${chalk.yellow(`projx ${templateName}`)}.`)
+            this.warn(`The template name "${templateName}" is reserved. To use it in future, you should use the "run" command like ${chalk.yellow(`xcute run ${templateName}`)}, instead of ${chalk.yellow(`xcute ${templateName}`)}.`)
         }
 
         this.log('Enter commands (one per line, empty line to finish):')

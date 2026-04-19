@@ -4,7 +4,7 @@
   "version": "0.6.0",
   "author": "Hichem Taboukouyout",
   "bin": {
-    "projx": "./bin/run.js"
+    "xcute": "./bin/run.js"
   },
   "bugs": "https://github.com/HichemTab-tech/xcute/issues",
   "dependencies": {
@@ -50,8 +50,8 @@
   "main": "dist/index.js",
   "type": "module",
   "oclif": {
-    "bin": "projx",
-    "dirname": "projx",
+    "bin": "xcute",
+    "dirname": "xcute",
     "commands": "./dist/commands",
     "hooks": {
       "command_not_found": "./dist/hooks/command_not_found"

@@ -11,7 +11,7 @@ class SelfUpdate extends BaseCommand {
         }),
     }
 
-    static description = 'Self update the projx CLI'
+    static description = 'Self update the xcute CLI'
 
     static examples = ['<%= config.bin %> <%= command.id %>']
 

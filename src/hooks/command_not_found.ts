@@ -1,32 +1,32 @@
 import {Hook} from '@oclif/core'
 
-import {getTemplate, templateExists} from '../utils/config.js'
-import {runTemplate} from '../utils/runner.js'
+import {actionExists, getAction} from '../utils/config.js'
+import {runAction} from '../utils/runner.js'
 
 const hook: Hook<'command_not_found'> = async function (opts) {
     const {id} = opts
 
     // The id is the command that was not found
     // oclif joins command parts with ':', e.g., "react:my-app" for "xcute react my-app"
-    // We need to extract the template name (first part)
+    // We need to extract the action name (first part)
     if (!id) {
         return
     }
 
     const parts = id.split(':')
-    const templateName = parts[0]
+    const actionName = parts[0]
 
-    if (!templateExists(templateName)) {
+    if (!actionExists(actionName)) {
         return
     }
 
-    const template = getTemplate(templateName)
+    const action = getAction(actionName)
 
-    if (!template) {
+    if (!action) {
         return
     }
 
-    // Get additional args from process.argv (skip node, script, template name)
+    // Get additional args from process.argv (skip node, script, action name)
     const providedValues = process.argv.slice(3)
 
     // Check for --interactive flag
@@ -37,7 +37,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     // Remove the interactive flag from values
     const cleanedValues = providedValues.filter((v) => v !== '--interactive' && v !== '-i')
 
-    const success = await runTemplate(template, {
+    const success = await runAction(action, {
         interactive,
         log: (msg) => console.log(msg),
         logError: (msg) => console.error(msg),

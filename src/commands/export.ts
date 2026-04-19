@@ -11,7 +11,7 @@ class Export extends BaseCommand {
         path: Args.string({description: 'Path to export file', required: true}),
     }
 
-    static description = 'Export the template registry to a JSON file'
+    static description = 'Export the action registry to a JSON file'
 
     static examples = [
         '<%= config.bin %> <%= command.id %> ./backup.json',

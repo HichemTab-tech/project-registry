@@ -23,24 +23,24 @@ describe('select', () => {
         prompts.select = originalSelect
     })
 
-    it('selects and runs a template', async () => {
+    it('selects and runs an action', async () => {
         // Setup config
         const configPath = path.join(testDir, 'config.json')
         const configData = {
-            'selected-template': {
+            'selected-action': {
                 commands: ['echo "selected output"'],
-                description: 'Selected template'
+                description: 'Selected action'
             }
         }
         fs.writeFileSync(configPath, JSON.stringify(configData))
 
         // Mock prompt
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        prompts.select = (async () => 'selected-template') as any
+        prompts.select = (async () => 'selected-action') as any
 
         const {stdout} = await runCommand(['select'])
 
-        expect(stdout).to.contain('Running template: selected-template')
+        expect(stdout).to.contain('Running action: selected-action')
         expect(stdout).to.contain('selected output')
     })
 })

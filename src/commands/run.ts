@@ -1,15 +1,15 @@
 import {Args, Flags} from '@oclif/core'
 
 import {BaseCommand} from "../BaseCommand.js";
-import {getTemplate, templateExists} from '../utils/config.js'
-import {runTemplate} from '../utils/runner.js'
+import {actionExists, getAction} from '../utils/config.js'
+import {runAction} from '../utils/runner.js'
 
 class Run extends BaseCommand {
     static args = {
-        name: Args.string({description: 'Template name to run', required: true}),
+        name: Args.string({description: 'Action name to run', required: true}),
     }
 
-    static description = 'Run a registered template'
+    static description = 'Run a registered action'
 
     static examples = [
         '<%= config.bin %> run react my-app',
@@ -25,24 +25,24 @@ class Run extends BaseCommand {
     async run(): Promise<void> {
         const {args, argv, flags} = await this.parse(Run)
 
-        const templateName = args.name
+        const actionName = args.name
 
-        // Check if template exists
-        if (!templateExists(templateName)) {
-            this.error(`Template "${templateName}" not found`)
+        // Check if action exists
+        if (!actionExists(actionName)) {
+            this.error(`Action "${actionName}" not found`)
         }
 
-        const template = getTemplate(templateName)
+        const action = getAction(actionName)
 
-        if (!template) {
-            this.error(`Template "${templateName}" not found`)
+        if (!action) {
+            this.error(`Action "${actionName}" not found`)
         }
 
         // Get provided variable values from remaining arguments
         const allArgs = argv as string[]
-        const providedValues = allArgs.slice(1) // Skip the template name
+        const providedValues = allArgs.slice(1) // Skip the action name
 
-        const success = await runTemplate(template, {
+        const success = await runAction(action, {
             interactive: flags.interactive,
             log: (msg) => this.log(msg),
             logError: (msg) => this.error(msg, {exit: false}),

@@ -1,16 +1,16 @@
 import {Args, Flags} from '@oclif/core'
 
 import {BaseCommand} from "../BaseCommand.js";
-import {deleteTemplate, templateExists} from '../utils/config.js'
+import {actionExists, deleteAction} from '../utils/config.js'
 import {buildChoices} from "../utils/dry.js";
 import {prompts} from "../utils/prompts.js";
 
 class Remove extends BaseCommand {
     static args = {
-        name: Args.string({description: 'Template name to remove', required: false}),
+        name: Args.string({description: 'Action name to remove', required: false}),
     }
 
-    static description = 'Remove a registered template'
+    static description = 'Remove a registered action'
 
     static examples = [
         '<%= config.bin %> <%= command.id %> react',
@@ -19,39 +19,39 @@ class Remove extends BaseCommand {
 
     // noinspection SqlNoDataSourceInspection
     static flags = {
-        select: Flags.boolean({char: 's', description: 'Select template from a list'}),
+        select: Flags.boolean({char: 's', description: 'Select action from a list'}),
         yes: Flags.boolean({allowNo: false, char: 'y', description: 'Skip confirmation prompting'}),
     }
 
     async run(): Promise<void> {
         const {args, flags} = await this.parse(Remove)
 
-        let templateName: string
+        let actionName: string
 
         if (flags.select) {
             const choicesResult = buildChoices.bind(this)()
             if (!choicesResult) return;
 
-            templateName = await prompts.select({
+            actionName = await prompts.select({
                 choices: choicesResult.choices,
-                message: 'Select a template to remove:',
+                message: 'Select an action to remove:',
             })
         } else if (args.name) {
-            templateName = args.name
+            actionName = args.name
         } else {
-            this.error('Template name is required. Use --select to choose from a list.')
+            this.error('Action name is required. Use --select to choose from a list.')
         }
 
-        // Check if template exists
-        if (!templateExists(templateName)) {
-            this.error(`Template "${templateName}" not found`)
+        // Check if action exists
+        if (!actionExists(actionName)) {
+            this.error(`Action "${actionName}" not found`)
         }
 
         if (!flags.yes) {
             // Confirm deletion
             const confirmed = await prompts.confirm({
                 default: false,
-                message: `Remove template "${templateName}"?`,
+                message: `Remove action "${actionName}"?`,
             })
 
             if (!confirmed) {
@@ -60,9 +60,9 @@ class Remove extends BaseCommand {
             }
         }
 
-        // Delete the template
-        deleteTemplate(templateName)
-        this.log(`Template "${templateName}" removed`)
+        // Delete the action
+        deleteAction(actionName)
+        this.log(`Action "${actionName}" removed`)
     }
 }
 

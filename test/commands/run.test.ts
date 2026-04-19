@@ -18,7 +18,7 @@ describe('run', () => {
         fs.rmSync(testDir, {force: true, recursive: true})
     })
 
-    it('runs a template command', async () => {
+    it('runs an action command', async () => {
         const configPath = path.join(testDir, 'config.json')
         const configData = {
             'test-run': {

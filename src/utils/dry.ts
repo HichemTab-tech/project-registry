@@ -1,27 +1,27 @@
 import {Command} from "@oclif/core";
 
-import {getAllTemplates} from "./config.js";
+import {getAllActions} from "./config.js";
 
 export function buildChoices (this: Command, filter?: string) {
-    const templates = getAllTemplates(filter)
-    const names = Object.keys(templates)
+    const actions = getAllActions(filter)
+    const names = Object.keys(actions)
 
     if (names.length === 0) {
-        this.log('No templates registered')
+        this.log('No actions registered')
         return
     }
 
     // Build choices for the select prompt
     return {
         choices: names.map((name, index) => {
-            const template = templates[name]
-            const description = template.description ? ` - ${template.description}` : ''
+            const action = actions[name]
+            const description = action.description ? ` - ${action.description}` : ''
             return {
                 name: `${index + 1}. ${name}${description}`,
                 value: name,
             }
         }),
-        templates
+        actions
     };
 }
 

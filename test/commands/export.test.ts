@@ -17,7 +17,7 @@ describe('export', () => {
     
     // Setup initial config
     saveConfig({
-        'test-template': {
+        'test-action': {
             commands: ['echo test']
         }
     })
@@ -36,8 +36,8 @@ describe('export', () => {
     expect(fs.existsSync(outputFile)).to.be.true
     
     const content = JSON.parse(fs.readFileSync(outputFile, 'utf8'))
-    expect(content['test-template']).to.exist
-    expect(content['test-template'].commands).to.deep.equal(['echo test'])
+    expect(content['test-action']).to.exist
+    expect(content['test-action'].commands).to.deep.equal(['echo test'])
   })
 
   it('exports registry to a directory', async () => {
@@ -48,6 +48,6 @@ describe('export', () => {
     expect(fs.existsSync(expectedFile)).to.be.true
     
     const content = JSON.parse(fs.readFileSync(expectedFile, 'utf8'))
-    expect(content['test-template']).to.exist
+    expect(content['test-action']).to.exist
   })
 })

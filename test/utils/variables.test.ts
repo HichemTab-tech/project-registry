@@ -43,6 +43,28 @@ describe('variables', () => {
       })
     })
 
+    it('should extract variable with default value only', () => {
+      const result = extractVariables(['echo {{name|my-app}}'])
+
+      expect([...result.keys()]).to.deep.equal(['name'])
+      expect(result.get('name')).to.deep.equal({
+        defaultValue: 'my-app',
+        description: '',
+        replacements: ['name|my-app']
+      })
+    })
+
+    it('should extract variable with description and default value', () => {
+      const result = extractVariables(['echo {{name::project name|my-app}}'])
+
+      expect([...result.keys()]).to.deep.equal(['name'])
+      expect(result.get('name')).to.deep.equal({
+        defaultValue: 'my-app',
+        description: 'project name',
+        replacements: ['name::project name|my-app']
+      })
+    })
+
     it('should extract variable mixed with and without description', () => {
       // Order: without description first
       let result = extractVariables(['echo {{name}}', 'echo {{name::project name}}'])
@@ -66,6 +88,16 @@ describe('variables', () => {
         const result = extractVariables(['{{name::desc1}}', '{{name::desc2}}'])
         expect(result.get('name')?.description).to.equal('desc2')
         expect(result.get('name')?.replacements).to.include.members(['name::desc1', 'name::desc2'])
+    })
+
+    it('should keep the latest default value when the same variable appears multiple times', () => {
+      const result = extractVariables(['{{name|first}}', '{{name::Project name|second}}'])
+
+      expect(result.get('name')).to.deep.equal({
+        defaultValue: 'second',
+        description: 'Project name',
+        replacements: ['name|first', 'name::Project name|second']
+      })
     })
   })
 
@@ -92,6 +124,17 @@ describe('variables', () => {
             }
         })
         expect(result).to.equal('echo my-project && cd my-project')
+    })
+
+    it('should replace variables with default-value syntax', () => {
+      const result = replaceVariables('echo {{name::project name|my-app}} && cd {{name|my-app}}', {
+        name: {
+          replacements: ['name::project name|my-app', 'name|my-app'],
+          result: 'custom-app'
+        }
+      })
+
+      expect(result).to.equal('echo custom-app && cd custom-app')
     })
 
     it('should keep unreplaced variables as-is', () => {

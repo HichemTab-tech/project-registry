@@ -3,7 +3,7 @@ import {execa, execaCommand, ExecaError} from 'execa'
 
 import {Template} from './config.js'
 import {prompts} from "./prompts.js";
-import {extractVariables, replaceAllVariables} from './variables.js'
+import {extractVariables, replaceAllVariables, VariableDefinition} from './variables.js'
 
 export interface RunOptions {
     interactive?: boolean
@@ -16,6 +16,12 @@ export interface ShellExecutionPlan {
     args?: string[]
     command: string
     shell?: true
+}
+
+export interface VariableResolutionPlan {
+    promptDefault?: string
+    shouldPrompt: boolean
+    value?: string
 }
 
 export function createShellExecutionPlan(command: string, platform = process.platform, userShell = process.env.SHELL): ShellExecutionPlan {
@@ -35,6 +41,27 @@ export function createShellExecutionPlan(command: string, platform = process.pla
     }
 }
 
+export function resolveVariableValue(variable: VariableDefinition, providedValue: string | undefined, interactive: boolean): VariableResolutionPlan {
+    if (!interactive && providedValue !== undefined) {
+        return {
+            shouldPrompt: false,
+            value: providedValue,
+        }
+    }
+
+    if (!interactive && variable.defaultValue !== undefined) {
+        return {
+            shouldPrompt: false,
+            value: variable.defaultValue,
+        }
+    }
+
+    return {
+        promptDefault: providedValue ?? variable.defaultValue,
+        shouldPrompt: true,
+    }
+}
+
 export async function runTemplate(template: Template, options: RunOptions): Promise<boolean> {
     const {interactive = false, log, logError, providedValues = []} = options
 
@@ -49,20 +76,18 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
 
     let i = 0;
     for (const [key, variable] of variables.entries()) {
+        const resolutionPlan = resolveVariableValue(variable, providedValues[i], interactive)
 
-        if (providedValues[i] && !interactive) {
-            // Use provided value if available and not in interactive mode
+        if (!resolutionPlan.shouldPrompt) {
             values[key] = {
                 replacements: variable.replacements,
-                result: providedValues[i]
+                result: resolutionPlan.value ?? ''
             }
-        } else if (interactive || !providedValues[i]) {
-            // Prompt for value in interactive mode or if not provided
-            const defaultValue = providedValues[i] || ''
+        } else {
             values[key] = {
                 replacements: variable.replacements,
                 result: await prompts.input({
-                    default: defaultValue || undefined,
+                    default: resolutionPlan.promptDefault || undefined,
                     message: `${key}:${variable.description ? ` ${chalk.grey(`(${variable.description})`)}` : ""}`,
                 })
             }

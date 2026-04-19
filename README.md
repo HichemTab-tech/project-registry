@@ -1,6 +1,8 @@
 # xcute
 
-A CLI tool to save and run command templates with variables.
+A CLI to save, reuse, and execute command actions.
+
+> _Previously known as **project-registry**_
 
 [![Version](https://img.shields.io/npm/v/xcute.svg)](https://npmjs.org/package/xcute)
 [![Downloads/week](https://img.shields.io/npm/dw/xcute.svg)](https://npmjs.org/package/xcute)
@@ -27,12 +29,12 @@ pnpm add -g xcute
 
 ## Quick Start
 
-### 1. Add a simple template
+### 1. Add a simple action
 
-A template is just **a name mapped to one or more commands**.
+An action is just **a name mapped to one or more commands**.
 
 ```bash
-xcute add react "pnpm create vite . --template react"
+xcute add react "pnpm create vite . --action react"
 ```
 
 ### 2. Run it
@@ -46,13 +48,13 @@ That’s it ^.^
 
 ## Using variables
 
-Templates can contain variables using the `{{variable}}` syntax.
+Actions can contain variables using the `{{variable}}` syntax.
 
 Example:
 
 ```bash
 xcute add react \
-  "pnpm create vite {{name}} --template react" \
+  "pnpm create vite {{name}} --action react" \
   "cd {{name}}" \
   "pnpm install"
 ```
@@ -62,13 +64,13 @@ xcute add react \
 You can provide a description for a variable to make the prompt more helpful using `{{variable::description}}` syntax:
 
 ```bash
-xcute add my-template "echo {{name::Enter the project name}}"
+xcute add my-action "echo {{name::Enter the project name}}"
 ```
 
 If you use the same variable multiple times, you only need to add the description once:
 
 ```bash
-xcute add my-template \
+xcute add my-action \
   "echo Creating {{name::Project Name}}" \
   "mkdir {{name}}" \
   "cd {{name}}"
@@ -79,13 +81,13 @@ xcute add my-template \
 You can provide a default value using `{{variable|default}}` syntax:
 
 ```bash
-xcute add my-template "code {{path|.}}"
+xcute add my-action "code {{path|.}}"
 ```
 
 You can combine description and default value with `{{variable::description|default}}`:
 
 ```bash
-xcute add my-template "echo {{name::Project Name|my-app}}"
+xcute add my-action "echo {{name::Project Name|my-app}}"
 ```
 
 Resolution order is:
@@ -104,7 +106,7 @@ If a value is missing, `xcute` will **ask for it automatically**.
 
 Variables are optional — if you don’t need them, don’t use them.
 
-## Running templates (name or select)
+## Running actions (name or select)
 
 ### Run directly by name
 
@@ -124,9 +126,9 @@ xcute select # or xcute s
 
 You’ll get a numbered list and can pick one.
 
-#### Filtering templates
+#### Filtering actions
 
-You can filter the list when you have many templates:
+You can filter the list when you have many actions:
 
 ```bash
 xcute select -f rea
@@ -144,14 +146,14 @@ This makes `select` the **default workflow** for many users.
 
 ### `xcute add <name> <commands...>`
 
-Register a new template with one or more commands.
+Register a new action with one or more commands.
 
 ```bash
 # Basic usage
 xcute add <name> "command1" "command2" "command3"
 
 # With description
-xcute add <name> -d "My template description" "command1" "command2"
+xcute add <name> -d "My action description" "command1" "command2"
 
 # Interactive mode
 xcute add
@@ -161,9 +163,9 @@ Variables use `{{variable}}` syntax and are resolved at run time.
 
 ### `xcute run <name> [values...]`
 
-Run a registered template.
+Run a registered action.
 
-On Unix-like systems, templates are executed through your current shell from `$SHELL` in interactive mode when available, so aliases and shell functions from your normal CLI are available there too.
+On Unix-like systems, actions are executed through your current shell from `$SHELL` in interactive mode when available, so aliases and shell functions from your normal CLI are available there too.
 
 ```bash
 # Pass variable values as arguments
@@ -183,7 +185,7 @@ xcute react my-app
 
 ### `xcute list`
 
-List all registered templates.
+List all registered actions.
 
 ```bash
 # Table format (default)
@@ -194,7 +196,7 @@ xcute list --no-table
 
 ### `xcute select`
 
-Interactively select and run a template.
+Interactively select and run a action.
 
 ```bash
 xcute select
@@ -203,7 +205,7 @@ xcute select -f react   # filter by name
 
 ### `xcute remove <name>`
 
-Remove a template.
+Remove a action.
 
 ```bash
 xcute remove react
@@ -213,7 +215,7 @@ xcute remove -y      # skip confirmation
 
 ### `xcute export <path>`
 
-Export your template registry to a JSON file (backup).
+Export your action registry to a JSON file (backup).
 
 ```bash
 # Export to a file
@@ -225,16 +227,16 @@ xcute export ./backups/
 
 ### `xcute import <path>|<url>`
 
-Import templates from a JSON file or URL.
+Import action from a JSON file or URL.
 
 ```bash
 # Import from local file (merges with existing)
 xcute import backup.json
 
 # Import from URL
-xcute import https://example.com/shared-templates.json
+xcute import https://example.com/shared-actions.json
 
-# Import from file and replace ALL existing templates
+# Import from file and replace ALL existing actions
 xcute import backup.json --replace
 ```
 
@@ -260,7 +262,7 @@ xcute self-update yarn
 ```bash
 # React + Vite
 xcute add react \
-  "pnpm create vite {{name}} --template react-ts" \
+  "pnpm create vite {{name}} --action react-ts" \
   "cd {{name}}" \
   "pnpm install" \
   "code ."
@@ -286,21 +288,9 @@ xcute add dcd "docker compose down"
 xcute add ssh-prod "ssh {{user}}@production-server.com"
 ```
 
-## Not just for projects
-
-`xcute` works for **any repeatable command sequence**:
-
-* Git workflows
-* Docker commands
-* SSH shortcuts
-* Build & deploy scripts
-* System utilities
-
-It’s a **command template registry**, not just a project generator.
-
 ## Config location
 
-Templates are stored at:
+Actions are stored at:
 
 ```
 ~/.xcute/config.json

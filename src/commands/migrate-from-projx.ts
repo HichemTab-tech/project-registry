@@ -23,12 +23,16 @@ class MigrateFromProjx extends BaseCommand {
     }
 
     hasLegacyGlobalInstall(): boolean {
-        try {
-            const globalNodeModulesPath = this.exec('npm root -g').toString().trim()
-            return fs.existsSync(path.join(globalNodeModulesPath, 'project-registry'))
-        } catch {
-            return false
+        for (const command of ['npm root -g', 'pnpm root -g']) {
+            try {
+                const globalNodeModulesPath = this.exec(command).toString().trim()
+                if (fs.existsSync(path.join(globalNodeModulesPath, 'project-registry'))) {
+                    return true
+                }
+            } catch {}
         }
+
+        return false
     }
 
     async run(): Promise<void> {

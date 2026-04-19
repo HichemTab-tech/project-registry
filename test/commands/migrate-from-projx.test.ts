@@ -119,4 +119,53 @@ describe('migrate-from-projx', () => {
 
         expect(confirmCalled).to.equal(false)
     })
+
+    it('detects a legacy global install from pnpm when npm does not have it', () => {
+        const npmRoot = path.join(testDir, 'npm-global')
+        const pnpmRoot = path.join(testDir, 'pnpm-global')
+        fs.mkdirSync(npmRoot, {recursive: true})
+        fs.mkdirSync(path.join(pnpmRoot, 'project-registry'), {recursive: true})
+
+        const executedCommands: string[] = []
+        const hasLegacyInstall = MigrateFromProjx.prototype.hasLegacyGlobalInstall.call({
+            exec(command: string) {
+                executedCommands.push(command)
+                if (command === 'npm root -g') {
+                    return Buffer.from(npmRoot)
+                }
+
+                if (command === 'pnpm root -g') {
+                    return Buffer.from(pnpmRoot)
+                }
+
+                throw new Error(`Unexpected command: ${command}`)
+            },
+        } as MigrateFromProjx)
+
+        expect(hasLegacyInstall).to.equal(true)
+        expect(executedCommands).to.deep.equal(['npm root -g', 'pnpm root -g'])
+    })
+
+    it('returns false when neither npm nor pnpm has the legacy package', () => {
+        const npmRoot = path.join(testDir, 'npm-global')
+        const pnpmRoot = path.join(testDir, 'pnpm-global')
+        fs.mkdirSync(npmRoot, {recursive: true})
+        fs.mkdirSync(pnpmRoot, {recursive: true})
+
+        const hasLegacyInstall = MigrateFromProjx.prototype.hasLegacyGlobalInstall.call({
+            exec(command: string) {
+                if (command === 'npm root -g') {
+                    return Buffer.from(npmRoot)
+                }
+
+                if (command === 'pnpm root -g') {
+                    return Buffer.from(pnpmRoot)
+                }
+
+                throw new Error(`Unexpected command: ${command}`)
+            },
+        } as MigrateFromProjx)
+
+        expect(hasLegacyInstall).to.equal(false)
+    })
 })

@@ -1,4 +1,4 @@
-# Why project-registry was renamed to xcute
+# Why project-registry was renamed to xcute-cli
 
 > For more info about migration guide, check the [MIGRATION.md](MIGRATION.md) document.
 

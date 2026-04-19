@@ -15,7 +15,7 @@ This project has been renamed to **xcute**.
 
 👉 Install the new package:
 ```bash
-npm i -g xcute
+npm i -g xcute-cli
 ```
 
 For migration guide check https://github.com/HichemTab-tech/xcute/blob/0.6.0/MIGRATION.md

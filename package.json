@@ -1,6 +1,6 @@
 {
   "name": "project-registry",
-  "description": "A developer CLI that starts projects from named templates backed by shell commands. (deprecated - check xcute)",
+  "description": "A developer CLI that starts projects from named templates backed by shell commands. (deprecated - check xcute-cli)",
   "version": "0.6.0",
   "author": "Hichem Taboukouyout",
   "bin": {

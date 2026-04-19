@@ -1,6 +1,6 @@
-# Migration Guide: project-registry → xcute
+# Migration Guide: project-registry → xcute-cli
 
-This guide explains how to migrate from **project-registry** to **xcute**.
+This guide explains how to migrate from **project-registry** to **xcute-cli**.
 
 > For more info about why the rename happened, check the [WHY.md](WHY.md) document.
 
@@ -9,7 +9,7 @@ This guide explains how to migrate from **project-registry** to **xcute**.
 The package has been renamed:
 
 - Old: `project-registry`
-- New: `xcute`
+- New: `xcute-cli`
 
 The functionality remains the same, but the name now better reflects the tool’s purpose.
 
@@ -17,14 +17,14 @@ The functionality remains the same, but the name now better reflects the tool’
 
 ```bash
 npm uninstall -g project-registry
-npm install -g xcute
+npm install -g xcute-cli
 ```
 
 or
 
 ```bash
 pnpm remove -g project-registry
-pnpm add -g xcute
+pnpm add -g xcute-cli
 ```
 
 ## 2. Migrate your existing configuration
@@ -59,8 +59,9 @@ xcute <command>
 
 Same if you have an alias to projx in your shell configuration:
 
-```bash
-alias projx='xcute'
+```diff
+-alias x='projx'
++alias x='xcute'
 ```
 
 ## 5. Remote imports (no change)

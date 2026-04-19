@@ -1,7 +1,7 @@
 {
   "name": "project-registry",
-  "description": "A developer CLI that starts projects from named templates backed by shell commands.",
-  "version": "0.5.0",
+  "description": "A developer CLI that starts projects from named templates backed by shell commands. (deprecated - check xcute)",
+  "version": "0.6.0",
   "author": "Hichem Taboukouyout",
   "bin": {
     "projx": "./bin/run.js"

@@ -22,7 +22,8 @@ describe('self-update', () => {
     })
 
     it('runs self-update with default pnpm', async () => {
-        const {stdout} = await runCommand(['self-update'])
+        const {stdout, stderr} = await runCommand(['self-update'])
+        expect(stderr).to.contain('xcute')
         expect(stdout).to.contain('Updating from:')
         expect(stdout).to.contain('mock output')
         expect(executedCommands).to.include('pnpm add project-registry@latest -g')

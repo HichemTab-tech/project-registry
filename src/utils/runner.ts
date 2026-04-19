@@ -78,20 +78,16 @@ export async function runTemplate(template: Template, options: RunOptions): Prom
     for (const [key, variable] of variables.entries()) {
         const resolutionPlan = resolveVariableValue(variable, providedValues[i], interactive)
 
-        if (!resolutionPlan.shouldPrompt) {
-            values[key] = {
-                replacements: variable.replacements,
-                result: resolutionPlan.value ?? ''
-            }
-        } else {
-            values[key] = {
+        values[key] = resolutionPlan.shouldPrompt ? {
                 replacements: variable.replacements,
                 result: await prompts.input({
                     default: resolutionPlan.promptDefault || undefined,
                     message: `${key}:${variable.description ? ` ${chalk.grey(`(${variable.description})`)}` : ""}`,
                 })
-            }
-        }
+            } : {
+                replacements: variable.replacements,
+                result: resolutionPlan.value ?? ''
+            };
 
         i++;
     }

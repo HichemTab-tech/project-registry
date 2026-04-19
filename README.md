@@ -9,6 +9,17 @@ A CLI tool to save and run command templates with variables.
 
 ![project-registry banner](assets/banner.png)
 
+# ⚠️ Deprecated
+
+This project has been renamed to **xcute**.
+
+👉 Install the new package:
+```bash
+npm i -g xcute
+```
+
+For more info check https://github.com/HichemTab-tech/xcute/blob/master/README.md
+
 ## Installation
 
 **Requirements:**

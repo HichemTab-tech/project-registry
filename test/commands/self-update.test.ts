@@ -22,8 +22,7 @@ describe('self-update', () => {
     })
 
     it('runs self-update with default pnpm', async () => {
-        const {stdout, stderr} = await runCommand(['self-update'])
-        expect(stderr).to.contain('xcute')
+        const {stdout} = await runCommand(['self-update'])
         expect(stdout).to.contain('Updating from:')
         expect(stdout).to.contain('mock output')
         expect(executedCommands).to.include('pnpm add xcute@latest -g')

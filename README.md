@@ -142,6 +142,74 @@ Example:
 
 This makes `select` the **default workflow** for many users.
 
+## Tip: shorten `xcute` to `x`
+
+If you use `xcute` a lot, adding a shell alias can make common flows faster.
+
+Example:
+
+```bash
+x add react "pnpm create vite . --action react"
+x react
+x select
+```
+
+### Linux / macOS
+
+For `bash` or `zsh`, add this to your shell config:
+
+```bash
+alias x='xcute'
+```
+
+Common locations:
+
+- `~/.bashrc`
+- `~/.zshrc`
+
+After saving, reload your shell:
+
+```bash
+source ~/.bashrc
+# or
+source ~/.zshrc
+```
+
+### Windows
+
+For PowerShell, add this function to your PowerShell profile:
+
+```powershell
+function x { xcute $args }
+```
+
+If your profile does not exist yet, create it first:
+
+```powershell
+New-Item -ItemType File -Path $PROFILE -Force
+```
+
+Then open it:
+
+```powershell
+notepad $PROFILE
+```
+
+Save the function, then reload your profile:
+
+```powershell
+. $PROFILE
+```
+
+This gives you a short `x` command in every new PowerShell session.
+
+For Command Prompt (`cmd.exe`), you can create a shortcut for the current session with:
+
+```bat
+doskey x=xcute $*
+```
+
+
 ## Commands
 
 ### `xcute add <name> <commands...>`

@@ -30,17 +30,17 @@ class SelfUpdate extends BaseCommand {
         let command: string|undefined;
         switch (packageManager) {
             case 'npm': {
-                command = 'npm install -g xcute@latest';
+                command = 'npm install -g xcute-cli@latest';
                 break;
             }
 
             case 'pnpm': {
-                command = 'pnpm add xcute@latest -g';
+                command = 'pnpm add xcute-cli@latest -g';
                 break;
             }
 
             case 'yarn': {
-                command = 'yarn global add xcute@latest';
+                command = 'yarn global add xcute-cli@latest';
                 break;
             }
         }

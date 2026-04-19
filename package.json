@@ -1,5 +1,5 @@
 {
-  "name": "xcute",
+  "name": "xcute-cli",
   "description": "Execute reusable command workflows from a single CLI.",
   "version": "0.7.0",
   "author": "Hichem Taboukouyout",

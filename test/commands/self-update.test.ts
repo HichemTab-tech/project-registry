@@ -25,22 +25,22 @@ describe('self-update', () => {
         const {stdout} = await runCommand(['self-update'])
         expect(stdout).to.contain('Updating from:')
         expect(stdout).to.contain('mock output')
-        expect(executedCommands).to.include('pnpm add xcute@latest -g')
+        expect(executedCommands).to.include('pnpm add xcute-cli@latest -g')
     })
 
     it('runs self-update with npm', async () => {
         await runCommand(['self-update', 'npm'])
-        expect(executedCommands).to.include('npm install -g xcute@latest')
+        expect(executedCommands).to.include('npm install -g xcute-cli@latest')
     })
 
     it('runs self-update with yarn', async () => {
         await runCommand(['self-update', 'yarn'])
-        expect(executedCommands).to.include('yarn global add xcute@latest')
+        expect(executedCommands).to.include('yarn global add xcute-cli@latest')
     })
 
     it('runs self-update with pnpm explicit', async () => {
         await runCommand(['self-update', 'pnpm'])
-        expect(executedCommands).to.include('pnpm add xcute@latest -g')
+        expect(executedCommands).to.include('pnpm add xcute-cli@latest -g')
     })
 
     it('fails gracefully on error', async () => {

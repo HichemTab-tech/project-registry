@@ -17,13 +17,13 @@ A CLI to save, reuse, and execute command actions.
 - Node.js version **21.0.0** or higher.
 
 ```bash
-npm install -g xcute
+npm install -g xcute-cli
 ```
 
 or
 
 ```bash
-pnpm add -g xcute
+pnpm add -g xcute-cli
 ```
 
 

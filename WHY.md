@@ -1,5 +1,7 @@
 # Why project-registry was renamed to xcute
 
+> For more info about migration guide, check the [MIGRATION.md](MIGRATION.md) document.
+
 ## Initial idea
 
 When this project started, it was designed to solve a very specific problem:

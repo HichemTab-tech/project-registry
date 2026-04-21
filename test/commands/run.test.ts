@@ -31,4 +31,21 @@ describe('run', () => {
         const {stdout} = await runCommand(['run', 'test-run'])
         expect(stdout).to.contain('run test output')
     })
+
+    it('shows the final command without executing it when dry-run is enabled', async () => {
+        const outputPath = path.join(testDir, 'dry-run-output.txt')
+        const escapedOutputPath = JSON.stringify(outputPath)
+        const configPath = path.join(testDir, 'config.json')
+        const configData = {
+            'test-run': {
+                commands: [`node -e "require('node:fs').writeFileSync(${escapedOutputPath}, 'ran')"`],
+                description: 'Run test'
+            }
+        }
+        fs.writeFileSync(configPath, JSON.stringify(configData))
+
+        const {stdout} = await runCommand(['run', 'test-run', '--dry-run'])
+        expect(stdout).to.contain('$ node -e')
+        expect(fs.existsSync(outputPath)).to.equal(false)
+    })
 })

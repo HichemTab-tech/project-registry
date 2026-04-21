@@ -6,6 +6,7 @@ import {prompts} from "./prompts.js";
 import {extractVariables, replaceAllVariables, VariableDefinition} from './variables.js'
 
 export interface RunOptions {
+    dryRun?: boolean
     interactive?: boolean
     log: (message: string) => void
     logError: (message: string) => void
@@ -63,7 +64,7 @@ export function resolveVariableValue(variable: VariableDefinition, providedValue
 }
 
 export async function runAction(action: Action, options: RunOptions): Promise<boolean> {
-    const {interactive = false, log, logError, providedValues = []} = options
+    const {dryRun = false, interactive = false, log, logError, providedValues = []} = options
 
     // Extract variables from commands
     const variables = extractVariables(action.commands)
@@ -98,6 +99,9 @@ export async function runAction(action: Action, options: RunOptions): Promise<bo
     const combinedCommand = resolvedCommands.join(' && ')
     log(`$ ${combinedCommand}`)
 
+    if (dryRun) {
+        return true
+    }
 
     try {
         const executionPlan = createShellExecutionPlan(combinedCommand)

@@ -34,10 +34,15 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     const shortInteractiveIndex = providedValues.indexOf('-i')
     const interactive = interactiveIndex !== -1 || shortInteractiveIndex !== -1
 
-    // Remove the interactive flag from values
-    const cleanedValues = providedValues.filter((v) => v !== '--interactive' && v !== '-i')
+    const dryRunIndex = providedValues.indexOf('--dry-run')
+    const shortDryRunIndex = providedValues.indexOf('-d')
+    const dryRun = dryRunIndex !== -1 || shortDryRunIndex !== -1
+
+    // Remove control flags before passing variable values through
+    const cleanedValues = providedValues.filter((v) => v !== '--interactive' && v !== '-i' && v !== '--dry-run' && v !== '-d')
 
     const success = await runAction(action, {
+        dryRun,
         interactive,
         log: (msg) => console.log(msg),
         logError: (msg) => console.error(msg),

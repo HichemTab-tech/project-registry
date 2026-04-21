@@ -4,9 +4,9 @@ A CLI to save, reuse, and execute command actions.
 
 > _Previously known as **project-registry**_
 
-[![Version](https://img.shields.io/npm/v/xcute.svg)](https://npmjs.org/package/xcute)
-[![Downloads/week](https://img.shields.io/npm/dw/xcute.svg)](https://npmjs.org/package/xcute)
-[![License](https://img.shields.io/npm/l/xcute.svg)](https://github.com/HichemTab-tech/xcute/blob/master/LICENSE)
+[![Version](https://img.shields.io/npm/v/xcute-cli.svg)](https://npmjs.org/package/xcute-cli)
+[![Downloads/week](https://img.shields.io/npm/dw/xcute-cli.svg)](https://npmjs.org/package/xcute-cli)
+[![License](https://img.shields.io/npm/l/xcute-cli.svg)](https://github.com/HichemTab-tech/xcute-cli/blob/master/LICENSE)
 
 
 ![xcute banner](assets/banner.png)

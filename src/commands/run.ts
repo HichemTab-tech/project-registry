@@ -14,9 +14,11 @@ class Run extends BaseCommand {
     static examples = [
         '<%= config.bin %> run react my-app',
         '<%= config.bin %> run react --interactive',
+        '<%= config.bin %> run react my-app --dry-run',
     ]
 
     static flags = {
+        'dry-run': Flags.boolean({char: 'd', description: 'Show the resolved command without executing it'}),
         interactive: Flags.boolean({char: 'i', description: 'Interactive mode - prompt for all variables'}),
     }
 
@@ -43,6 +45,7 @@ class Run extends BaseCommand {
         const providedValues = allArgs.slice(1) // Skip the action name
 
         const success = await runAction(action, {
+            dryRun: flags['dry-run'],
             interactive: flags.interactive,
             log: (msg) => this.log(msg),
             logError: (msg) => this.error(msg, {exit: false}),

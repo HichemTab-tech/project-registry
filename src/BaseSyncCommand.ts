@@ -38,6 +38,18 @@ export abstract class BaseSyncCommand extends BaseCommand {
         return result.stdout.trim()
     }
 
+    protected hasRemoteHeads(state: SyncState): boolean {
+        try {
+            return this.git(['ls-remote', '--heads', 'origin'], state.repoDir) !== ''
+        } catch (error) {
+            if (error instanceof Error) {
+                this.error(`Failed to inspect sync repo remote: ${error.message}`)
+            }
+
+            this.error('Failed to inspect sync repo remote.')
+        }
+    }
+
     protected parseStrategy(value: string): MergeStrategy {
         try {
             return parseMergeStrategy(value)
@@ -69,6 +81,10 @@ export abstract class BaseSyncCommand extends BaseCommand {
     }
 
     protected pullLatest(state: SyncState): void {
+        if (!this.hasRemoteHeads(state)) {
+            return
+        }
+
         try {
             this.git(['pull', '--ff-only'], state.repoDir)
         } catch (error) {

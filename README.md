@@ -308,6 +308,66 @@ xcute import https://example.com/shared-actions.json
 xcute import backup.json --replace
 ```
 
+### Sync with a private Git repo
+
+If you want the same registry on multiple machines, use a dedicated **private Git repository**.
+
+`xcute` keeps a managed clone locally and syncs the exported registry file through Git.
+
+This is safer and easier to reason about than using gists, especially when actions may contain private commands.
+
+Avoid storing secrets directly in synced commands whenever possible.
+
+### `xcute sync-init <repo-url>`
+
+Initialize sync by cloning a Git repository used to store your registry snapshot.
+
+```bash
+# Use a private repository
+xcute sync-init git@github.com:you/xcute-sync.git
+
+# Store the registry in a custom path inside the repo
+xcute sync-init git@github.com:you/xcute-sync.git --file data/xcute.json
+```
+
+### `xcute sync-pull`
+
+Pull the remote registry snapshot and merge it into your local registry.
+
+Conflicts are resolved per action name using one of these strategies:
+
+- `prompt` asks you which version should win
+- `local` keeps your local version
+- `remote` uses the remote version
+
+```bash
+# Interactive conflict resolution (default)
+xcute sync-pull
+
+# Always prefer remote changes on conflicts
+xcute sync-pull --strategy remote
+```
+
+### `xcute sync-push`
+
+Merge local and remote changes, write the merged snapshot into the sync repo, then push it upstream.
+
+```bash
+# Interactive conflict resolution (default)
+xcute sync-push
+
+# Always prefer local changes on conflicts
+xcute sync-push --strategy local
+```
+
+### `xcute sync-status`
+
+Show the configured sync repo, tracked registry file, local drift since the last sync point, remote drift since the last sync point, and Git status for the managed clone.
+
+```bash
+xcute sync-status
+```
+
 ### `xcute self-update [package-manager]`
 
 Update the CLI to the latest version.

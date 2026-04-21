@@ -12,17 +12,19 @@ class List extends BaseCommand {
 
     static examples = [
         '<%= config.bin %> <%= command.id %>',
-        '<%= config.bin %> <%= command.id %> -c'
+        '<%= config.bin %> <%= command.id %> -c',
+        '<%= config.bin %> <%= command.id %> -f react'
     ]
 
     static flags = {
+        filter: Flags.string({char: 'f', description: 'Filter actions by name (case-insensitive)'}),
         table: Flags.boolean({allowNo: true, char: 't', default: true, description: 'Show output in table format'}),
         "with-content": Flags.boolean({char: 'c', description: 'With action content'})
     }
 
     async run(): Promise<void> {
         const {flags} = await this.parse(List)
-        const actions = getAllActions()
+        const actions = getAllActions(flags.filter)
         const names = Object.keys(actions)
 
         if (names.length === 0) {

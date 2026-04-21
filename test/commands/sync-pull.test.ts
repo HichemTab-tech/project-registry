@@ -46,6 +46,11 @@ describe('sync-pull', () => {
 
         SyncPull.prototype.git = (args: string[]) => {
             executedGitCommands.push(args)
+
+            if (args[0] === 'ls-remote') {
+                return 'abc123\trefs/heads/main'
+            }
+
             return ''
         }
     })
@@ -60,6 +65,7 @@ describe('sync-pull', () => {
 
         expect(stdout).to.contain('Sync pull complete. Added: 0, Updated: 1, Removed: 0, Conflicts: 1')
         expect(executedGitCommands).to.deep.equal([
+            ['ls-remote', '--heads', 'origin'],
             ['pull', '--ff-only'],
         ])
 

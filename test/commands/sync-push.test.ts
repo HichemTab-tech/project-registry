@@ -46,6 +46,11 @@ describe('sync-push', () => {
 
         SyncPush.prototype.git = (args: string[]) => {
             executedGitCommands.push(args)
+
+            if (args[0] === 'ls-remote') {
+                return 'abc123\trefs/heads/main'
+            }
+
             return ''
         }
     })
@@ -60,10 +65,11 @@ describe('sync-push', () => {
 
         expect(stdout).to.contain('Sync push complete. Added: 0, Updated: 1, Removed: 0, Conflicts: 1')
         expect(executedGitCommands).to.deep.equal([
+            ['ls-remote', '--heads', 'origin'],
             ['pull', '--ff-only'],
             ['add', 'xcute.json'],
             ['commit', '-m', 'sync xcute registry'],
-            ['push'],
+            ['push', '--set-upstream', 'origin', 'HEAD'],
         ])
 
         const remoteConfig = JSON.parse(fs.readFileSync(path.join(repoDir, 'xcute.json'), 'utf8'))
@@ -71,5 +77,28 @@ describe('sync-push', () => {
 
         const state = loadSyncState()
         expect(state?.lastSyncedConfig.shared.commands).to.deep.equal(['echo local'])
+    })
+
+    it('skips pull when the remote repository is still empty', async () => {
+        executedGitCommands = []
+        SyncPush.prototype.git = (args: string[]) => {
+            executedGitCommands.push(args)
+
+            if (args[0] === 'ls-remote') {
+                return ''
+            }
+
+            return ''
+        }
+
+        const {stdout} = await runCommand(['sync-push', '--strategy', 'local'])
+
+        expect(stdout).to.contain('Sync push complete. Added: 0, Updated: 1, Removed: 0, Conflicts: 1')
+        expect(executedGitCommands).to.deep.equal([
+            ['ls-remote', '--heads', 'origin'],
+            ['add', 'xcute.json'],
+            ['commit', '-m', 'sync xcute registry'],
+            ['push', '--set-upstream', 'origin', 'HEAD'],
+        ])
     })
 })

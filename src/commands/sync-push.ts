@@ -30,7 +30,7 @@ class SyncPush extends BaseSyncCommand {
         try {
             this.git(['add', state.registryFile], state.repoDir)
             this.git(['commit', '-m', 'sync xcute registry'], state.repoDir)
-            this.git(['push'], state.repoDir)
+            this.git(['push', '--set-upstream', 'origin', 'HEAD'], state.repoDir)
         } catch (error) {
             if (error instanceof Error) {
                 this.error(`Failed to push sync changes: ${error.message}`)

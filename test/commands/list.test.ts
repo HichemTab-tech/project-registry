@@ -42,4 +42,23 @@ describe('list', () => {
         expect(stdout).to.contain('test-action')
         expect(stdout).to.contain('A test action')
     })
+
+    it('filters actions by name with the filter flag', async () => {
+        const configPath = path.join(testDir, 'config.json')
+        const configData = {
+            'react-app': {
+                commands: ['echo react'],
+                description: 'React action'
+            },
+            'vue-app': {
+                commands: ['echo vue'],
+                description: 'Vue action'
+            }
+        }
+        fs.writeFileSync(configPath, JSON.stringify(configData))
+
+        const {stdout} = await runCommand(['list', '-f', 'react'])
+        expect(stdout).to.contain('react-app')
+        expect(stdout).to.not.contain('vue-app')
+    })
 })

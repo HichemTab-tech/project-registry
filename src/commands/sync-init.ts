@@ -48,7 +48,7 @@ class SyncInit extends BaseSyncCommand {
         const remoteConfig = readRegistrySnapshot(registryPath) ?? {}
 
         saveSyncState({
-            lastSyncedConfig: remoteConfig,
+            lastSyncedConfig: {},
             registryFile: flags.file,
             repoDir,
             repoUrl: args.repoUrl,

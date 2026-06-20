@@ -72,4 +72,21 @@ describe('sync-pull', () => {
         const config = JSON.parse(fs.readFileSync(path.join(testDir, 'config.json'), 'utf8'))
         expect(config.shared.commands).to.deep.equal(['echo remote'])
     })
+
+    it('adds remote-only actions on the first pull after sync init', async () => {
+        saveConfig({})
+        saveSyncState({
+            lastSyncedConfig: {},
+            registryFile: 'xcute.json',
+            repoDir,
+            repoUrl: 'git@github.com:example/xcute-sync.git',
+        })
+
+        const {stdout} = await runCommand(['sync-pull'])
+
+        expect(stdout).to.contain('Sync pull complete. Added: 1, Updated: 0, Removed: 0, Conflicts: 0')
+
+        const config = JSON.parse(fs.readFileSync(path.join(testDir, 'config.json'), 'utf8'))
+        expect(config.shared.commands).to.deep.equal(['echo remote'])
+    })
 })

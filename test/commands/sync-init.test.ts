@@ -40,7 +40,7 @@ describe('sync-init', () => {
         fs.rmSync(testDir, {force: true, recursive: true})
     })
 
-    it('configures sync and stores the initial remote snapshot', async () => {
+    it('configures sync and leaves the initial remote snapshot available to pull', async () => {
         const repoUrl = 'git@github.com:example/xcute-sync.git'
 
         const {stdout} = await runCommand(['sync-init', repoUrl])
@@ -53,11 +53,7 @@ describe('sync-init', () => {
 
         const state = loadSyncState()
         expect(state).to.deep.equal({
-            lastSyncedConfig: {
-                remote: {
-                    commands: ['echo remote'],
-                },
-            },
+            lastSyncedConfig: {},
             registryFile: 'xcute.json',
             repoDir: path.join(testDir, 'sync-repo'),
             repoUrl,

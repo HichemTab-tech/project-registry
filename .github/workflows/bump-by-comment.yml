@@ -145,7 +145,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.perm.outputs.allowed == 'true'
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Configure Git
         if: steps.perm.outputs.allowed == 'true'

@@ -16,4 +16,3 @@ workbench/*
 test-config-dir/*
 !test-config-dir/.gitkeep
 tsconfig.tsbuildinfo
-pnpm-workspace.yaml

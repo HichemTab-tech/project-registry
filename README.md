@@ -131,7 +131,9 @@ You’ll get a numbered list and can pick one.
 You can filter the list when you have many actions:
 
 ```bash
-xcute select -f rea
+xcute select rea
+xcute s rea
+xcute select -f rea # still supported
 ```
 
 Example:
@@ -268,7 +270,9 @@ Interactively select and run a action.
 
 ```bash
 xcute select
-xcute select -f react   # filter by name
+xcute select react      # filter by name
+xcute s react           # same via alias
+xcute select -f react   # legacy filter flag
 ```
 
 ### `xcute remove <name>`
